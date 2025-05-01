@@ -34,10 +34,10 @@ INSTALLATION STEPS :
 - Create Database named project1​.
 - Import database project1.sql from downloaded folder(inside database)
 4. Open Your browser put inside "http://localhost/Online-Exam-System/"
-5. To Login as admin put the following details.
+<!-- 5. To Login as admin put the following details.
 - Admin Login Details
 - Login Id: head@gmail.com
-- Password: head
+- Password: head -->
 ## ONLINE EXAMINATION SYSTEM FEATURES :
 1. Login system must be present and secured by password.
 2. Ability to setup multiple choice question paper. 
