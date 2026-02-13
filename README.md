@@ -1,69 +1,137 @@
-# Online-exam-system
+# 🎓 ECUSTA Online Exam System
 
-Licensed under CC BY-NC-ND 4.0. No commercial use or modifications allowed.
+A modern, web-based online examination platform built with PHP and MySQL. Designed for educational institutions to manage quizzes, students, and teachers through a clean, role-based dashboard system.
 
-Online examination system is a app for setup online quiz with so many functionality.
-It is a PHP project.
+![PHP](https://img.shields.io/badge/PHP-7.4+-777BB4?logo=php&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-5.7+-4479A1?logo=mysql&logoColor=white)
+![License](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey)
 
+---
 
-Instalation ::
+## ✨ Features
+
+### 👨‍🎓 Student Portal
+- Sign in / Sign up with a modern glassmorphism interface
+- Browse and take multiple-choice exams
+- View results immediately after submission
+- Track exam history and overall rankings
+
+### 👩‍🏫 Teacher Dashboard
+- Create quizzes with custom time limits, marks, and penalties
+- Add multiple-choice questions with 4 options each
+- View student scores for your quizzes
+- Remove quizzes you've created
+
+### 🛡️ Admin Dashboard
+- **System overview** with live stats (students, quizzes, teachers, feedback)
+- **Full quiz management** — create, add questions, and remove any quiz
+- **User management** — view all students, add new students, remove accounts
+- **Teacher management** — add/remove teacher accounts
+- **Feedback inbox** — read and manage student feedback
+- **Rankings** — view the overall student leaderboard
+
+---
+
+## 🛠️ Installation
+
+### Prerequisites
+- [XAMPP](https://www.apachefriends.org/) or [WAMP](https://www.wampserver.com/) (Apache + PHP + MySQL)
+- phpMyAdmin (included with XAMPP/WAMP)
 
 ### Steps
 
-1)Copy full folder in your web directory.
+1. **Clone or copy** the project into your web server directory:
+   ```bash
+   # For XAMPP
+   cp -r Online-exam-system /opt/lampp/htdocs/
 
-2)Import database in your phpmyadmin named project1.sql.
+   # For WAMP
+   cp -r Online-exam-system C:/wamp64/www/
+   ```
 
-3)Edit dbconnection file.change username,password and database name.
-- Default user is root,password is null and database name is project1.
+2. **Create the database:**
+   - Open [phpMyAdmin](http://localhost/phpmyadmin)
+   - Create a new database named **`project1`**
+   - Import the file `project1.sql` from the project root
 
-<!-- Default admin email id is head@gmail.com and password is head .
-admin password is md5 encypted. -->
+3. **Configure the database connection** (if needed):
+   - Edit `dbConnection.php` with your credentials
+   - Defaults: host=`localhost`, user=`root`, password=`""`, database=`project1`
 
-For any query or feedback contact me at kpsagar1999@gmail.com.
+4. **Open in your browser:**
+   ```
+   http://localhost/Online-exam-system/
+   ```
 
-Thanx.
+---
 
+## 🔐 Default Login Credentials
 
-## Precise Explanation regarding the work in detail :
-INSTALLATION STEPS :
-1. Copy zip file and Unzip file on your local server.
-2. Put this file inside WAMP or XAMPP server.
-3. Database Configuration
-- Open phpmyadmin
-- Create Database named project1​.
-- Import database project1.sql from downloaded folder(inside database)
-4. Open Your browser put inside "http://localhost/Online-Exam-System/"
-<!-- 5. To Login as admin put the following details.
-- Admin Login Details
-- Login Id: head@gmail.com
-- Password: head -->
-## ONLINE EXAMINATION SYSTEM FEATURES :
-1. Login system must be present and secured by password.
-2. Ability to setup multiple choice question paper. 
-3. Display of quick and accurate results.
-4. Rankings , and history of exams attempted can be looked after.
-4. Admin panel
-- Can add/remove the teachers.
-- Can view the feedbacks.
- 5. Teacher panel
-- Can add/remove question papers.
-- Can view the individual test results and overall rankings.
- 6. Student panel
-- Can write the exams shown in home page 
-- Only once  a student can attempt the examination , after then the examination is disabled until the teacher removes it.
-- Can view the overall ranking and the details of scores and examinations previously attempted.
- 7. Log out after the over.
-8. Users can send the suggestions and feedbacks from the home page , it can be viewed by admin.
-## What makes our online exam system web project differs from others
-Low internet connection would be sufficient to load the pages, since we haven’t used any picture data(using pictures the user with low internet connection takes time to load the images).
-In other online exam system websites , we can find only one admin who is surely responsible for the addition or deletion of the test, but we made this site any number of authorized persons can add/remove the examinations and these all authorized persons and users of this site will be controlled by the admin.
-It could be very helpful for educational institues acting as :
-* Admin(headdash.php)    ---   director of institute 
-* Teacher(dash.php)   ---   professors of college
-* User(acccount.php)        ---   students of the college
-* home page (index.php)
-Security with password , even the admin cannot look at the password , ensuring the trust of the users.
-A feedback system available for suggesting improvements and registering complaints.
+| Role     | Email               | Password   | Dashboard        |
+|----------|---------------------|------------|------------------|
+| Admin    | `head@gmail.com`    | `head`     | `headdash.php`   |
+| Teacher  | `teacher1@gmail.com`| `teacher1` | `dash.php`       |
+| Student  | *(sign up to create)* | —        | `account.php`    |
 
+- **Students** log in at the main page (`index.php`)
+- **Admin & Teachers** log in at the admin portal (`admin_login.php`)
 
+---
+
+## 📁 Project Structure
+
+```
+Online-exam-system/
+├── index.php            # Student sign-in / sign-up portal
+├── admin_login.php      # Admin & Teacher login portal
+├── account.php          # Student dashboard
+├── dash.php             # Teacher dashboard
+├── headdash.php         # Admin dashboard
+├── login.php            # Student login handler
+├── sign.php             # Student registration handler
+├── admin.php            # Teacher login handler
+├── head.php             # Admin login handler
+├── signadmin.php        # Teacher registration handler
+├── update.php           # Backend operations (quiz, user, admin CRUD)
+├── logout.php           # Session destroyer
+├── dbConnection.php     # Database connection config
+├── project1.sql         # Database schema & seed data
+├── ecusta_logo.png      # University logo
+├── css/
+│   └── main.css         # Global stylesheet
+└── js/
+    └── main.js          # Client-side scripts
+```
+
+---
+
+## 🗄️ Database Schema
+
+| Table       | Purpose                                |
+|-------------|----------------------------------------|
+| `user`      | Student accounts (name, email, college, etc.) |
+| `admin`     | Teacher & admin accounts (email, password, role) |
+| `quiz`      | Quiz metadata (title, marks, time limit) |
+| `questions` | Quiz questions                         |
+| `options`   | Answer options for each question       |
+| `answer`    | Correct answer mapping                 |
+| `history`   | Student exam attempts & scores         |
+| `rank`      | Cumulative student rankings            |
+| `feedback`  | Student feedback messages              |
+
+---
+
+## 🎨 Tech Stack
+
+- **Backend:** PHP 7.4+
+- **Database:** MySQL 5.7+
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Fonts:** [Inter](https://fonts.google.com/specimen/Inter) (Google Fonts)
+- **Icons:** [Material Icons](https://fonts.google.com/icons) (Google Fonts)
+- **Design:** Glassmorphism, dark theme, responsive sidebar layout
+
+---
+
+## 📄 License
+
+Licensed under [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/). No commercial use or modifications allowed.
