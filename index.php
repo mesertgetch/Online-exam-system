@@ -1,769 +1,526 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Onine examiner</title>
-<link  rel="stylesheet" href="css/bootstrap.min.css"/>
- <link  rel="stylesheet" href="css/bootstrap-theme.min.css"/>    
- <link rel="stylesheet" href="css/main.css">
- <link  rel="stylesheet" href="css/font.css">
- <script src="js/jquery.js" type="text/javascript"></script>
-
-  <script src="js/bootstrap.min.js"  type="text/javascript"></script>
-  <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
-<?php if(@$_GET['w'])
-{echo'<script>alert("'.@$_GET['w'].'");</script>';}
-?>
-<script>
-function validateForm() {var y = document.forms["form"]["name"].value;  var letters = /^[A-Za-z]+$/;if (y == null || y == "") {alert("Name must be filled out.");return false;}var z =document.forms["form"]["college"].value;if (z == null || z == "") {alert("college must be filled out.");return false;}var x = document.forms["form"]["email"].value;var atpos = x.indexOf("@");
-var dotpos = x.lastIndexOf(".");if (atpos<1 || dotpos<atpos+2 || dotpos+2>=x.length) {alert("Not a valid e-mail address.");return false;}var a = document.forms["form"]["password"].value;if(a == null || a == ""){alert("Password must be filled out");return false;}if(a.length<5 || a.length>25){alert("Passwords must be 5 to 25 characters long.");return false;}
-var b = document.forms["form"]["cpassword"].value;if (a!=b){alert("Passwords must match.");return false;}}
-</script>
-
-
-
-
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECUSTA — Online Examination System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <?php if (@$_GET['w']) {
+    echo '<script>window.addEventListener("DOMContentLoaded",function(){showAlert("' . htmlspecialchars(@$_GET['w'], ENT_QUOTES) . '","error");});</script>';
+  } ?>
+  <?php if (@$_GET['q7']) {
+    echo '<script>window.addEventListener("DOMContentLoaded",function(){showAlert("' . htmlspecialchars(@$_GET['q7'], ENT_QUOTES) . '","error");});</script>';
+  } ?>
+
   <style>
-  body 
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 40%, #1a5276 70%, #0d2137 100%);
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
 
-.modal {
-  text-align: center;
-}
-
-@media screen and (min-width: 768px) { 
-  .modal:before {
-    display: inline-block;
-    vertical-align: middle;
-    content: " ";
-    height: 100%;
-  }
-}
-
-.modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
-}
-
-
-
-  {
-      font: 400 15px Lato, sans-serif;
-      line-height: 1.8;
-      color: #818181;
-  }
-  h2 {
-      font-size: 24px;
-      text-transform: uppercase;
-      color: #303030;
-      font-weight: 600;
-      margin-bottom: 30px;
-  }
-  h4 {
-      font-size: 19px;
-      line-height: 1.375em;
-      color: #303030;
-      font-weight: 400;
-      margin-bottom: 30px;
-  }  
-  .left{
-  float:left;
-}
-
-.right{
-  float:right;
-}
-
-.clear{
-  clear:both;
-}
-  .jumbotron {
-      background-color: #f4511e;
-      color: #fff;
-      padding: 100px 25px;
-      font-family: Montserrat, sans-serif;
-  }
-  .container-fluid {
-      padding: 60px 50px;
-  }
-  .bg-grey {
-      background-color: #f6f6f6;
-  }
-  .logo-small {
-      color: #f4511e;
-      font-size: 50px;
-  }
-  .logo {
-      color: #f4511e;
-      font-size: 200px;
-  }
- 
-  .thumbnail {
-      padding: 0 0 15px 0;
-      border: none;
-      border-radius: 0;
-  }
-  .thumbnail img {
+    /* Animated background particles */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      margin-bottom: 10px;
-  }
-  .carousel-control.right, .carousel-control.left {
-      background-image: none;
-      color: #f4511e;
-  }
-  .carousel-indicators li {
-      border-color: #f4511e;
-  }
-  .carousel-indicators li.active {
-      background-color: #f4511e;
-  }
-  .item h4 {
-      font-size: 19px;
-      line-height: 1.375em;
-      font-weight: 400;
-      font-style: italic;
-      margin: 70px 0;
-  }
-  .item span {
-      font-style: normal;
-  }
-  .panel {
-      border: 1px solid #f4511e; 
-      border-radius:0 !important;
-      transition: box-shadow 0.5s;
-  }
-  .panel:hover {
-      box-shadow: 5px 0px 40px rgba(0,0,0, .2);
-  }
-  .panel-footer .btn:hover {
-      border: 1px solid #f4511e;
-      background-color: #fff !important;
-      color: #f4511e;
-  }
-  .panel-heading {
-      color: #fff !important;
-      background-color: #f4511e !important;
-      padding: 25px;
-      border-bottom: 1px solid transparent;
-      border-top-left-radius: 0px;
-      border-top-right-radius: 0px;
-      border-bottom-left-radius: 0px;
-      border-bottom-right-radius: 0px;
-  }
-  .panel-footer {
-      background-color: white !important;
-  }
-  .panel-footer h3 {
-      font-size: 32px;
-  }
-  .panel-footer h4 {
-      color: #aaa;
-      font-size: 14px;
-  }
-  .panel-footer .btn {
-      margin: 15px 0;
-      background-color: #f4511e;
-      color: #fff;
-  }
-  .navbar {
-      margin-bottom: 0;
-
-      background-color: #f4511e;
-      z-index: 9999;
-      border: 0;
-      
-      font-size: 12px !important;
-      line-height: 1.42857143 !important;
-      letter-spacing: 4px;
-      border-radius: 0;
-      font-family: Montserrat, sans-serif;
-  }
-  .navbar li a, .navbar .navbar-brand {
-      color: #f4511e !important;
-  }
-  .navbar-nav li a:hover, .navbar-nav li.active a {
-      color: #f4511e !important;
-      background-color: #fff !important;
-
-  }
-  .navbar-default .navbar-toggle {
-      border-color: transparent;
-      color: #fff !important;
-  }
-  footer .glyphicon {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #f4511e;
-  }
-  .slideanim {visibility:hidden;}
-  .slide {
-      animation-name: slide;
-      -webkit-animation-name: slide;
-      animation-duration: 1s;
-      -webkit-animation-duration: 1s;
-      visibility: visible;
-  }
-  @keyframes slide {
-    0% {
-      opacity: 0;
-      transform: translateY(70%);
-    } 
-    100% {
-      opacity: 1;
-      transform: translateY(0%);
+      background:
+        radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.15), transparent),
+        radial-gradient(2px 2px at 40% 70%, rgba(255, 255, 255, 0.1), transparent),
+        radial-gradient(1px 1px at 90% 40%, rgba(255, 255, 255, 0.15), transparent),
+        radial-gradient(1px 1px at 60% 80%, rgba(255, 255, 255, 0.12), transparent),
+        radial-gradient(2px 2px at 80% 10%, rgba(255, 255, 255, 0.1), transparent);
+      pointer-events: none;
+      z-index: 0;
     }
-  }
-  @-webkit-keyframes slide {
-    0% {
-      opacity: 0;
-      -webkit-transform: translateY(70%);
-    } 
-    100% {
-      opacity: 1;
-      -webkit-transform: translateY(0%);
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 460px;
+      padding: 20px;
     }
-  }
-  @media screen and (max-width: 768px) {
-    .col-sm-4 {
+
+    /* Logo section */
+    .logo-section {
       text-align: center;
-      margin: 25px 0;
+      margin-bottom: 28px;
+      animation: fadeInDown 0.8s ease-out;
     }
-    .btn-lg {
-        width: 100%;
-        margin-bottom: 35px;
+
+    .logo-section img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      margin-bottom: 16px;
+      object-fit: cover;
+      background: white;
     }
-  }
-  @media screen and (max-width: 480px) {
-    .logo {
-        font-size: 150px;
+
+    .logo-section h1 {
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
     }
-  }
+
+    .logo-section p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* Card */
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 36px 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    /* Tab navigation */
+    .tabs {
+      display: flex;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      padding: 4px;
+      margin-bottom: 28px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 0;
+      border: none;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.5);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+    }
+
+    .tab-btn.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    /* Forms */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 8px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 12px;
+      color: #ffffff;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+
+    .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: rgba(79, 172, 254, 0.6);
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.15);
+    }
+
+    .form-group select {
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff50' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 12px center;
+      background-repeat: no-repeat;
+      background-size: 20px;
+      cursor: pointer;
+    }
+
+    .form-group select option {
+      background: #1a3a5c;
+      color: #ffffff;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      letter-spacing: 0.5px;
+      margin-top: 6px;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      color: #0a1628;
+      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Admin link */
+    .admin-link {
+      text-align: center;
+      margin-top: 24px;
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+    }
+
+    .admin-link a {
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 13px;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .admin-link a:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .admin-link .material-icons {
+      font-size: 16px;
+    }
+
+    /* Alert toast */
+    .alert-toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      padding: 14px 24px;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 9999;
+      animation: slideInRight 0.4s ease, fadeOut 0.4s ease 4s forwards;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      max-width: 360px;
+    }
+
+    .alert-toast.error {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    }
+
+    .alert-toast.success {
+      background: linear-gradient(135deg, #11998e, #38ef7d);
+      color: #0a1628;
+    }
+
+    /* Footer */
+    .footer-text {
+      text-align: center;
+      margin-top: 20px;
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 11px;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 28px 22px;
+      }
+
+      .logo-section img {
+        width: 90px;
+        height: 90px;
+      }
+
+      .logo-section h1 {
+        font-size: 18px;
+      }
+
+      .form-row {
+        flex-direction: column;
+        gap: 0;
+      }
+    }
   </style>
-
-
 </head>
 
-
-
-
-
 <body>
-
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-
-<nav class="navbar navbar-default navbar-fixed-top">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-      <a class="navbar-brand" href="#myPage"><span class="glyphicon glyphicon-home"></span></a>
+    <!-- Logo -->
+    <div class="logo-section">
+      <img src="ecusta_logo.png" alt="ECUSTA Logo">
+      <h1>ECUSTA</h1>
+      <p>Online Examination System</p>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="#" data-toggle="modal" data-target="#login">ADMIN</a></li>
-        <li><a href="#" data-toggle="modal" data-target="#myModal">SIGN IN</a></li>
-        <li><a href="#" data-toggle="modal" data-target="#myModal1">SIGN UP</a></li>
-         <li><a href="#" data-toggle="modal" data-target="#login2">TEACHER</a></li>
-  <li><a href="#services" >SERVICES</a></li>
-        <li><a href="#developers">DEVELOPERS</a></li>
-        <li><a href="#about">ABOUT</a></li>
-        <li><a href="#contact">CONTACT</a></li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
-<div class="jumbotron text-center">
-  <h1>Online Examination</h1> 
-  <p>e-EXAMINATION</p> 
-  <!--  form>
-    <div class="input-group">
-      <input type="email" class="form-control" size="50" placeholder="Email Address" required>
-      <div class="input-group-btn">
-        <button type="button" class="btn btn-danger">Subscribe</button>
+    <!-- Card -->
+    <div class="card">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('signin')">Sign In</button>
+        <button class="tab-btn" onclick="switchTab('signup')">Sign Up</button>
       </div>
-    </div>
-  </form -->
-</div>
 
-
-
-<!-- Container (Admin Section) -->
-<div class="modal fade" id="login">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title"><span style="color:#f4511e;font-family:Montserrat, sans-serif; font-size: 20px !important;letter-spacing: 4px; "><b>LOGIN -ADMIN</b></span></h4>
+      <!-- Sign In Form -->
+      <div id="signin" class="tab-content active">
+        <form action="login.php?q=index.php" method="POST">
+          <div class="form-group">
+            <label for="login-email">Email Address</label>
+            <input id="login-email" name="email" type="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input id="login-password" name="password" type="password" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="btn-primary">Sign In</button>
+        </form>
       </div>
-      <div class="modal-body title1">
-<div class="row">
-<div class="col-md-3"></div>
-<div class="col-md-6">
-<form role="form" method="post" action="head.php?q=index.php">
-<div class="form-group">
-<input type="text" name="uname" maxlength="20"  placeholder="Admin user id" class="form-control"/> 
-</div>
-<div class="form-group">
-<input type="password" name="password" maxlength="15" placeholder="Password" class="form-control"/>
-</div>
-<div class="form-group" align="center">
-<input type="submit" name="login" value="Login" class="btn btn-primary" />
-</div>
-</form>
-</div><div class="col-md-3"></div></div>
-      </div>
-      <!--<div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>-->
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
 
+      <!-- Sign Up Form -->
+      <div id="signup" class="tab-content">
+        <form name="form" action="sign.php?q=account.php" method="POST" onsubmit="return validateSignUp()">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-name">Full Name</label>
+              <input id="reg-name" name="name" type="text" placeholder="Your name" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-gender">Gender</label>
+              <select id="reg-gender" name="gender" required>
+                <option value="" disabled selected>Select</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+              </select>
+            </div>
+          </div>
 
+          <div class="form-group">
+            <label for="reg-college">College / Department</label>
+            <input id="reg-college" name="college" type="text" placeholder="e.g. Computer Science" required>
+          </div>
 
-<!----Teacher signin--->
-<div class="modal fade" id="login2">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-        <h4 class="modal-title"><span style="color:#f4511e;font-family:Montserrat, sans-serif; font-size: 20px !important;letter-spacing: 4px; "><b>LOGIN -TEACHER</b></span></h4>
-      </div>
-      <div class="modal-body title1">
-<div class="row">
-<div class="col-md-3"></div>
-<div class="col-md-6">
-<form role="form" method="post" action="admin.php?q=index.php">
-<div class="form-group">
-<input type="text" name="uname" maxlength="20"  placeholder="Teacher user id" class="form-control"/> 
-</div>
-<div class="form-group">
-<input type="password" name="password" maxlength="15" placeholder="Password" class="form-control"/>
-</div>
-<div class="form-group" align="center">
-<input type="submit" name="login2" value="Login" class="btn btn-primary" />
-</div>
-</form>
-</div><div class="col-md-3"></div></div>
-      </div>
-      <!--<div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>-->
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+          <div class="form-group">
+            <label for="reg-email">Email Address</label>
+            <input id="reg-email" name="email" type="email" placeholder="you@example.com" required>
+          </div>
 
+          <div class="form-group">
+            <label for="reg-mob">Mobile Number</label>
+            <input id="reg-mob" name="mob" type="number" placeholder="e.g. 0912345678" required>
+          </div>
 
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-password">Password</label>
+              <input id="reg-password" name="password" type="password" placeholder="Min 5 chars" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-cpassword">Confirm</label>
+              <input id="reg-cpassword" name="cpassword" type="password" placeholder="Repeat" required>
+            </div>
+          </div>
 
-<div class="container-fluid bg-grey">
-  <div class="row">
-    <div class="col-sm-4">
-      <span class="glyphicon glyphicon-globe logo slideanim"></span>
-    </div>
-    <div class="col-sm-8">
-      <h2>Our Values</h2><br>
-      <h4><strong>MISSION:</strong> Our mission is using one platform for examinations. Reduce paperwork and offering quick and accurate results. </h4><br>
-      <p><strong>VISION:</strong> Our vision of Online Exam System is more popularly helps for our modern age system. It helps us to use the present  technology into examiantion system . It can be helpful for quick and accurate results.Through it helps for only limited sector of people , it is cost efficient , eco friendly and so on.</p>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- Container (USERS section) -->
-<!--sign in modal start-->
-<div class="modal fade" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content title1">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title title1"><span style="color:#f4511e;font-family:Montserrat, sans-serif; font-size: 20px !important;letter-spacing: 4px; "><b>LOGIN -USER</b></span></h4>
-      </div>
-      <div class="modal-body">
-        <form class="form-horizontal" action="login.php?q=index.php" method="POST">
-<fieldset>
-
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="email"></label>  
-  <div class="col-md-6">
-  <input id="email" name="email" placeholder="Enter your email-id" class="form-control input-md" type="email">
-    
-  </div>
-</div>
-
-
-<!-- Password input-->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="password"></label>
-  <div class="col-md-6">
-    <input id="password" name="password" placeholder="Enter your Password" class="form-control input-md" type="password">
-    
-  </div>
-</div>
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Log in</button>
-    </fieldset>
-</form>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!--sign in modal closed-->
-
-<!--sign up modal start-->
-<div class="modal fade" id="myModal1">
-  <div class="modal-dialog">
-    <div class="modal-content title1">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title title1"><span  style="color:#f4511e;font-family:Montserrat, sans-serif; font-size: 20px !important;letter-spacing: 4px; "><b>SIGN UP</b></span></h4>
-      </div>
-      <div class="modal-body">
-       <form class="form-horizontal" name="form" action="sign.php?q=account.php" onSubmit="return validateForm()" method="POST">
-<fieldset>
-
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="name"></label>  
-  <div class="col-md-6">
-  <input id="name" name="name" placeholder="Enter your name" class="form-control input-md" type="text">
-    
-  </div>
-</div>
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="gender"></label>
-  <div class="col-md-6">
-    <select id="gender" name="gender" placeholder="Enter your gender" class="form-control input-md" >
-   <option value="Male">Select Gender</option>
-  <option value="M">Male</option>
-  <option value="F">Female</option> </select>
-  </div>
-</div>
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="name"></label>  
-  <div class="col-md-6">
-  <input id="college" name="college" placeholder="Enter your college name" class="form-control input-md" type="text">
-    
-  </div>
-</div>
-
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-3 control-label title1" for="email"></label>
-  <div class="col-md-6">
-    <input id="email" name="email" placeholder="Enter your email-id" class="form-control input-md" type="email">
-    
-  </div>
-</div>
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="mob"></label>  
-  <div class="col-md-6">
-  <input id="mob" name="mob" placeholder="Enter your mobile number" class="form-control input-md" type="number">
-    
-  </div>
-</div>
-
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-3 control-label" for="password"></label>
-  <div class="col-md-6">
-    <input id="password" name="password" placeholder="Enter your password" class="form-control input-md" type="password">
-    
-  </div>
-</div>
-
-<div class="form-group">
-  <label class="col-md-3 control-label" for="cpassword"></label>
-  <div class="col-md-6">
-    <input id="cpassword" name="cpassword" placeholder="Conform Password" class="form-control input-md" type="password">
-    
-  </div>
-</div>
-<?php if(@$_GET['q7'])
-{ echo'<p style="color:red;font-size:15px;">'.@$_GET['q7'];}?>
-<!-- Button -->
-<div class="form-group">
-  <label class="col-md-3 control-label" for=""></label>
-  <div class="col-md-6"> 
-    <input  type="submit"  style="background: #f4511e;" class="sub" value="sign up"  />
-  </div>
-</div>
-</fieldset>
-</form>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-<!--sign up modal closed-->
-
-
-
-
-
-
-
-
-<!-- Container (Services Section) -->
-<div id="services" class="container-fluid text-center">
-  <h2>SERVICES</h2>
-  <h4>What we offer</h4>
-  <br>
-  <div class="row slideanim">
-    <div class="col-sm-4">
-      <!-- span class="glyphicon glyphicon-off logo-small"></span-->
-      <i class="material-icons" style="font-size:60px;color:red">group_add</i>
-      <h4>e Examination</h4>
-      <p> Multiple users One platform</p>
-    </div>
-    <div class="col-sm-4">
-      <span class="glyphicon glyphicon-euro logo-small"></span>
-      <h4>COST OPTIMISED</h4>
-      <p>Reduces paper work</p>
-    </div>
-    <div class="col-sm-4">
-      <span class="glyphicon glyphicon-user logo-small"></span>
-      <h4>USER SATISFACTION</h4>
-      <p>User satisfaction is our satisfaction..</p>
-    </div>
-  </div>
-  <br><br>
-  <div class="row slideanim">
-    <div class="col-sm-4">
-      <span class="glyphicon glyphicon-leaf logo-small"></span>
-      <h4>GREEN</h4>
-      <p>Eco friendly</p>
-    </div>
-    <div class="col-sm-4">
-      <span class="glyphicon glyphicon-certificate logo-small"></span>
-      <h4>CERTIFIED</h4>
-      <p>Certified from the government of India..</p>
-    </div>
-    <div class="col-sm-4">
-      <span class="glyphicon glyphicon-envelope logo-small"></span>
-      <h4 style="color:#303030;">CONTACT US</h4>
-      <p>Contact us directly for help..</p>
-    </div>
-  </div>
-</div>
-
-<!-- Container (Portfolio Section) -->
-<div id="developers" class="container-fluid text-center bg-grey">
-  <h2>Developers</h2><br>
-  <h4>Who are we</h4>
-  <div class="row text-center slideanim">
-    <div class="col-sm-4">
-      <div class="thumbnail">
-        <img src="photo.jpg" alt="PRASANTH" width="400" height="300">
-        <p><strong>PRASANTH SAGAR KOTTAKOTA</strong></p>
-        <p>Nitk 3rd year BTECH</p>
-      </div>
-    </div>
-    <div class="col-sm-4">
-      <div class="thumbnail">
-        <img src="profilepic.jpg" alt="VIJAY" width="400" height="300">
-        <p><strong>VIJAY KUMAR</strong></p>
-        <p>Nitk 3rd year BTECH</p>
-      </div>
-    </div>
-    
-  </div><br>
-  
-  <h2>What our Users say</h2>
-  <div id="myCarousel" class="carousel slide text-center" data-ride="carousel">
-    <!-- Indicators -->
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-
-    <!-- Wrapper for slides -->
-    <div class="carousel-inner" role="listbox">
-      <div class="item active">
-        <h4>"Very good iniative. I am so happy with the result!"<br><span>Michael Roe, Vice President, Comment Box</span></h4>
-      </div>
-      <div class="item">
-        <h4>"One word... WOW!!"<br><span>John Doe, Salesman, Rep Inc</span></h4>
-      </div>
-      <div class="item">
-        <h4>"Could I... BE any more happy with this startup"<br><span>Chandler Bing, Actor, FriendsAlot</span></h4>
+          <button type="submit" class="btn-primary">Create Account</button>
+        </form>
       </div>
     </div>
 
-    <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
+    <!-- Admin / Teacher link -->
+    <div class="admin-link">
+      <a href="admin_login.php">
+        <span class="material-icons">admin_panel_settings</span>
+        Admin &amp; Teacher Portal
+      </a>
+    </div>
+
+    <p class="footer-text">&copy; 2026 ECUSTA — Ethiopian Catholic University St. Thomas Aquinas</p>
   </div>
-</div>
 
-<!-- Container (About Section) -->
-<div id="about" class="container-fluid">
-  <div class="row">
-    <div class="col-sm-8">
-      <h2>About Page</h2><br>
-      <h4>Online examination System is conducting a test online to measure the knowledge of the participants on a given topic. In the olden days everybody had to gather in a classroom at the same time to take an exam. With online examination students can do the exam online, in their own time and with their own device, regardless where they life. You online need a browser and internet connection. </h4><br>
-      <p>Online Examination System (OES) is a platform to hold online examinations. It caters to many requirements of holding online examinations. The system can generate statistical data for records. The system makes it possible to maintain a repository of questions, and then generate papers at a later stage, such that the lecturer has more flexibility over holding online quizzes. Furthermore, it provides the functionality to mark the papers automatically.</p> 
+  <script>
+    // Tab switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
 
-      <br><button class="btn btn-default btn-lg">Get in Touch</button>
-    </div>
-    <div class="col-sm-4">
-      <span class="glyphicon glyphicon-signal logo"></span>
-    </div>
-  </div>
-</div>
+    // Form validation
+    function validateSignUp() {
+      const name = document.getElementById('reg-name').value.trim();
+      const college = document.getElementById('reg-college').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const cpassword = document.getElementById('reg-cpassword').value;
 
+      if (!name) { showAlert('Name is required.', 'error'); return false; }
+      if (!college) { showAlert('College is required.', 'error'); return false; }
 
-<!-- Container (Contact Section) -->
-<div id="contact" class="container-fluid bg-grey">
-  <h2 class="text-center">CONTACT</h2>
-  <div class="row">
-    <div class="col-sm-5">
-      <p>Contact us and we'll get back to you within 24 hours.</p>
-      <p><span class="glyphicon glyphicon-map-marker"></span> Karnataka, INDIA</p>
-      <p><span class="glyphicon glyphicon-phone"></span> +91 9491849828 </p>
-      <p><span class="glyphicon glyphicon-envelope"></span> kpsagar1999@gmail.com</p>
-    </div>
-    <div class="col-sm-7 slideanim">
+      const atpos = email.indexOf("@");
+      const dotpos = email.lastIndexOf(".");
+      if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= email.length) {
+        showAlert('Please enter a valid email address.', 'error');
+        return false;
+      }
 
+      if (password.length < 5 || password.length > 25) {
+        showAlert('Password must be 5–25 characters.', 'error');
+        return false;
+      }
 
+      if (password !== cpassword) {
+        showAlert('Passwords do not match.', 'error');
+        return false;
+      }
 
+      return true;
+    }
 
-
-
-
-      <?php if(@$_GET['q'])echo '<span style="font-size:18px;"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;'.@$_GET['q'].'</span>';
-else
-{echo'
-      <form role="form"  method="post" action="feed.php?q=index.php">
-
-
-
-
-
-      <div class="row">
-        <div class="col-sm-6 form-group">
-          <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
-        </div>
-        <div class="col-sm-6 form-group">
-          <input class="form-control" id="email" name="subject" placeholder="subject" type="text" required>
-        </div>
-      </div>
-      <textarea class="form-control" id="comments" name="feedback" placeholder="Comment" rows="4"></textarea><br>
-      <div class="row">
-        <div class="col-sm-12 form-group">
-          <button class="btn btn-default pull-right" name="submit" input type="submit">send</button>
-        </div>
-      </form>';}?>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- Add Google Maps -->
-<div id="googleMap" style="height:400px;width:100%;"></div>
-<script>
-function myMap() {
-var myCenter = new google.maps.LatLng(13.0108439, 74.7921164);
-var mapProp = {center:myCenter, zoom:12, scrollwheel:false, draggable:false, mapTypeId:google.maps.MapTypeId.ROADMAP};
-var map = new google.maps.Map(document.getElementById("googleMap"),mapProp);
-var marker = new google.maps.Marker({position:myCenter});
-marker.setMap(map);
-}
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCFj4gNzJYXg7z8mlzs0fHLKvi1MAZYI3c&callback=myMap"></script>
-<!--
-To use this code on your website, get a free API key from Google.
-Read more at: https://www.w3schools.com/graphics/google_maps_basic.asp
--->
-
-<footer class="container-fluid text-center">
-  <a href="#myPage" title="To Top">
-    <span class="glyphicon glyphicon-chevron-up"></span>
-  </a>
-  <p>Thank you for visiting us.</p>
-</footer>
-
-<script>
-$(document).ready(function(){
-  // Add smooth scrolling to all links in navbar + footer link
-  $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
-    // Make sure this.hash has a value before overriding default behavior
-    if (this.hash !== "") {
-      // Prevent default anchor click behavior
-      event.preventDefault();
-
-      // Store hash
-      var hash = this.hash;
-
-      // Using jQuery's animate() method to add smooth page scroll
-      // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
-      $('html, body').animate({
-        scrollTop: $(hash).offset().top
-      }, 900, function(){
-   
-        // Add hash (#) to URL when done scrolling (default click behavior)
-        window.location.hash = hash;
-      });
-    } // End if
-  });
-  
-  $(window).scroll(function() {
-    $(".slideanim").each(function(){
-      var pos = $(this).offset().top;
-
-      var winTop = $(window).scrollTop();
-        if (pos < winTop + 600) {
-          $(this).addClass("slide");
-        }
-    });
-  });
-})
-</script>
-
+    // Alert toast
+    function showAlert(msg, type) {
+      const el = document.createElement('div');
+      el.className = 'alert-toast ' + (type || 'error');
+      el.textContent = msg;
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4500);
+    }
+  </script>
 </body>
 
-
-</html>
-
-
-
-
-
+</html>l
