@@ -7,6 +7,8 @@
   <title>ECUSTA — Online Examination System</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <script src="js/theme.js"></script>
 
   <?php if (@$_GET['w']) {
     echo '<script>window.addEventListener("DOMContentLoaded",function(){showAlert("' . htmlspecialchars(@$_GET['w'], ENT_QUOTES) . '","error");});</script>';
@@ -30,7 +32,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 40%, #1a5276 70%, #0d2137 100%);
+      background: var(--login-bg);
       background-attachment: fixed;
       overflow-x: hidden;
     }
@@ -80,7 +82,7 @@
     }
 
     .logo-section h1 {
-      color: #ffffff;
+      color: var(--text-primary);
       font-size: 22px;
       font-weight: 700;
       letter-spacing: 1px;
@@ -88,7 +90,7 @@
     }
 
     .logo-section p {
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--text-muted);
       font-size: 13px;
       font-weight: 400;
       letter-spacing: 2px;
@@ -97,20 +99,20 @@
 
     /* Card */
     .card {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--bg-card);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid var(--border-primary);
       border-radius: 20px;
       padding: 36px 32px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 60px var(--shadow-color), inset 0 1px 0 rgba(255, 255, 255, 0.1);
       animation: fadeInUp 0.8s ease-out 0.2s both;
     }
 
     /* Tab navigation */
     .tabs {
       display: flex;
-      background: rgba(255, 255, 255, 0.06);
+      background: var(--bg-input);
       border-radius: 12px;
       padding: 4px;
       margin-bottom: 28px;
@@ -121,7 +123,7 @@
       padding: 12px 0;
       border: none;
       background: transparent;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--text-muted);
       font-family: 'Inter', sans-serif;
       font-size: 14px;
       font-weight: 500;
@@ -132,13 +134,13 @@
     }
 
     .tab-btn.active {
-      background: rgba(255, 255, 255, 0.15);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background: var(--bg-card-hover);
+      color: var(--text-primary);
+      box-shadow: 0 4px 12px var(--shadow-color);
     }
 
     .tab-btn:hover:not(.active) {
-      color: rgba(255, 255, 255, 0.75);
+      color: var(--sidebar-text-hover);
     }
 
     /* Forms */
@@ -159,7 +161,7 @@
       display: block;
       font-size: 12px;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--text-muted);
       margin-bottom: 8px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
@@ -169,10 +171,10 @@
     .form-group select {
       width: 100%;
       padding: 14px 16px;
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: var(--bg-input);
+      border: 1px solid var(--border-input);
       border-radius: 12px;
-      color: #ffffff;
+      color: var(--text-primary);
       font-family: 'Inter', sans-serif;
       font-size: 14px;
       transition: all 0.3s ease;
@@ -180,13 +182,13 @@
     }
 
     .form-group input::placeholder {
-      color: rgba(255, 255, 255, 0.3);
+      color: var(--text-input-placeholder);
     }
 
     .form-group input:focus,
     .form-group select:focus {
-      border-color: rgba(79, 172, 254, 0.6);
-      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--border-input-focus);
+      background: var(--bg-input-focus);
       box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.15);
     }
 
@@ -201,8 +203,8 @@
     }
 
     .form-group select option {
-      background: #1a3a5c;
-      color: #ffffff;
+      background: var(--select-option-bg);
+      color: var(--text-primary);
     }
 
     .form-row {
@@ -226,14 +228,14 @@
       transition: all 0.3s ease;
       letter-spacing: 0.5px;
       margin-top: 6px;
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: #0a1628;
-      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+      background: var(--accent-gradient);
+      color: var(--bg-primary);
+      box-shadow: 0 4px 15px var(--shadow-color);
     }
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+      box-shadow: 0 8px 25px var(--shadow-color);
     }
 
     .btn-primary:active {
@@ -248,7 +250,7 @@
     }
 
     .admin-link a {
-      color: rgba(255, 255, 255, 0.45);
+      color: var(--text-dimmed);
       font-size: 13px;
       text-decoration: none;
       transition: color 0.3s ease;
@@ -258,7 +260,7 @@
     }
 
     .admin-link a:hover {
-      color: rgba(255, 255, 255, 0.8);
+      color: var(--sidebar-text-hover);
     }
 
     .admin-link .material-icons {
@@ -277,24 +279,23 @@
       font-weight: 500;
       z-index: 9999;
       animation: slideInRight 0.4s ease, fadeOut 0.4s ease 4s forwards;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 32px var(--shadow-color);
       max-width: 360px;
     }
 
     .alert-toast.error {
-      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      background: linear-gradient(135deg, var(--danger), #ff4b2b);
     }
 
     .alert-toast.success {
-      background: linear-gradient(135deg, #11998e, #38ef7d);
-      color: #0a1628;
+      background: linear-gradient(135deg, #11998e, var(--success));
+      color: var(--bg-primary);
     }
 
-    /* Footer */
     .footer-text {
       text-align: center;
       margin-top: 20px;
-      color: rgba(255, 255, 255, 0.25);
+      color: var(--text-faint);
       font-size: 11px;
       animation: fadeInUp 0.8s ease-out 0.6s both;
     }
@@ -381,6 +382,9 @@
 </head>
 
 <body>
+  <button class="theme-toggle theme-toggle-float" title="Toggle dark/light mode">
+    <span class="material-icons">light_mode</span>
+  </button>
   <div class="container">
     <!-- Logo -->
     <div class="logo-section">
@@ -430,19 +434,38 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label for="reg-college">College / Department</label>
-            <input id="reg-college" name="college" type="text" placeholder="e.g. Computer Science" required>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-college">College / Department</label>
+              <select id="reg-college" name="college" required onchange="updateRegYears()"
+                style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px">
+                <option value="" disabled selected>Select Department</option>
+                <?php
+                $q = mysqli_query($con, "SELECT * FROM departments ORDER BY dept_name ASC");
+                while ($row = mysqli_fetch_array($q)) {
+                  echo '<option value="' . htmlspecialchars($row['dept_name']) . '" data-years="' . htmlspecialchars($row['year_labels']) . '">' . htmlspecialchars($row['dept_name']) . '</option>';
+                }
+                ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="reg-year">Year</label>
+              <select id="reg-year" name="year" required
+                style="width:100%;padding:10px;border:1px solid #ddd;border-radius:5px">
+                <option value="" disabled selected>Select Department First</option>
+              </select>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="reg-email">Email Address</label>
-            <input id="reg-email" name="email" type="email" placeholder="you@example.com" required>
-          </div>
-
-          <div class="form-group">
-            <label for="reg-mob">Mobile Number</label>
-            <input id="reg-mob" name="mob" type="number" placeholder="e.g. 0912345678" required>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-email">Email Address</label>
+              <input id="reg-email" name="email" type="email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-mob">Mobile Number</label>
+              <input id="reg-mob" name="mob" type="number" placeholder="e.g. 0912345678" required>
+            </div>
           </div>
 
           <div class="form-row">
@@ -519,6 +542,23 @@
       el.textContent = msg;
       document.body.appendChild(el);
       setTimeout(() => el.remove(), 4500);
+    }
+  </script>
+  <script>
+    function updateRegYears() {
+      const select = document.getElementById('reg-college');
+      const years = select.selectedOptions[0].getAttribute('data-years');
+      const yearSelect = document.getElementById('reg-year');
+      yearSelect.innerHTML = '<option value="" disabled selected>Select Year</option>';
+      if (years) {
+        const yearList = years.split(',');
+        yearList.forEach(y => {
+          const opt = document.createElement('option');
+          opt.value = y.trim();
+          opt.textContent = y.trim();
+          yearSelect.appendChild(opt);
+        });
+      }
     }
   </script>
 </body>

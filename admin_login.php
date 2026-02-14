@@ -7,6 +7,8 @@
     <title>ECUSTA — Admin & Teacher Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="css/theme.css">
+    <script src="js/theme.js"></script>
 
     <?php if (@$_GET['w']) {
         echo '<script>window.addEventListener("DOMContentLoaded",function(){showAlert("' . htmlspecialchars(@$_GET['w'], ENT_QUOTES) . '","error");});</script>';
@@ -27,7 +29,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #1a0a2e 0%, #2d1b69 40%, #44318d 70%, #1a0a2e 100%);
+            background: var(--admin-login-bg);
             background-attachment: fixed;
             overflow-x: hidden;
         }
@@ -75,7 +77,7 @@
         }
 
         .logo-section h1 {
-            color: #ffffff;
+            color: var(--text-primary);
             font-size: 20px;
             font-weight: 700;
             letter-spacing: 1px;
@@ -85,10 +87,10 @@
         .logo-section .badge {
             display: inline-block;
             padding: 4px 14px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: var(--bg-input);
+            border: 1px solid var(--border-primary);
             border-radius: 20px;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-muted);
             font-size: 11px;
             font-weight: 500;
             letter-spacing: 2px;
@@ -97,19 +99,19 @@
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.06);
+            background: var(--bg-card);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-primary);
             border-radius: 20px;
             padding: 36px 32px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 60px var(--shadow-color), inset 0 1px 0 rgba(255, 255, 255, 0.08);
             animation: fadeInUp 0.8s ease-out 0.2s both;
         }
 
         .tabs {
             display: flex;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--bg-input);
             border-radius: 12px;
             padding: 4px;
             margin-bottom: 28px;
@@ -120,7 +122,7 @@
             padding: 12px 0;
             border: none;
             background: transparent;
-            color: rgba(255, 255, 255, 0.45);
+            color: var(--text-dimmed);
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 500;
@@ -131,13 +133,13 @@
         }
 
         .tab-btn.active {
-            background: rgba(255, 255, 255, 0.12);
-            color: #ffffff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+            box-shadow: 0 4px 12px var(--shadow-color);
         }
 
         .tab-btn:hover:not(.active) {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--sidebar-text-hover);
         }
 
         .tab-content {
@@ -154,19 +156,19 @@
             align-items: center;
             gap: 8px;
             padding: 10px 14px;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--bg-input);
             border-radius: 10px;
             margin-bottom: 22px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            border: 1px solid var(--border-primary);
         }
 
         .role-indicator .material-icons {
             font-size: 20px;
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--text-muted);
         }
 
         .role-indicator span {
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--text-muted);
             font-size: 13px;
         }
 
@@ -178,7 +180,7 @@
             display: block;
             font-size: 12px;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.65);
+            color: var(--text-muted);
             margin-bottom: 8px;
             letter-spacing: 0.5px;
             text-transform: uppercase;
@@ -187,10 +189,10 @@
         .form-group input {
             width: 100%;
             padding: 14px 16px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--bg-input);
+            border: 1px solid var(--border-input);
             border-radius: 12px;
-            color: #ffffff;
+            color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             transition: all 0.3s ease;
@@ -198,12 +200,12 @@
         }
 
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.25);
+            color: var(--text-input-placeholder);
         }
 
         .form-group input:focus {
-            border-color: rgba(168, 133, 255, 0.6);
-            background: rgba(255, 255, 255, 0.09);
+            border-color: var(--border-input-focus);
+            background: var(--bg-input-focus);
             box-shadow: 0 0 0 3px rgba(168, 133, 255, 0.15);
         }
 
@@ -219,14 +221,14 @@
             transition: all 0.3s ease;
             letter-spacing: 0.5px;
             margin-top: 6px;
-            background: linear-gradient(135deg, #a885ff 0%, #e572ff 100%);
-            color: #1a0a2e;
-            box-shadow: 0 4px 15px rgba(168, 133, 255, 0.3);
+            background: var(--admin-accent-gradient);
+            color: var(--admin-accent-dark);
+            box-shadow: 0 4px 15px var(--shadow-color);
         }
 
         .btn-admin:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(168, 133, 255, 0.4);
+            box-shadow: 0 8px 25px var(--shadow-color);
         }
 
         .btn-admin:active {
@@ -240,7 +242,7 @@
         }
 
         .back-link a {
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-dimmed);
             font-size: 13px;
             text-decoration: none;
             transition: color 0.3s ease;
@@ -250,7 +252,7 @@
         }
 
         .back-link a:hover {
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--sidebar-text-hover);
         }
 
         .back-link .material-icons {
@@ -268,18 +270,18 @@
             font-weight: 500;
             z-index: 9999;
             animation: slideInRight 0.4s ease, fadeOut 0.4s ease 4s forwards;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px var(--shadow-color);
             max-width: 360px;
         }
 
         .alert-toast.error {
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            background: linear-gradient(135deg, var(--danger), #ff4b2b);
         }
 
         .footer-text {
             text-align: center;
             margin-top: 20px;
-            color: rgba(255, 255, 255, 0.2);
+            color: var(--text-faint);
             font-size: 11px;
             animation: fadeInUp 0.8s ease-out 0.6s both;
         }
@@ -359,6 +361,9 @@
 </head>
 
 <body>
+    <button class="theme-toggle theme-toggle-float" title="Toggle dark/light mode">
+        <span class="material-icons">light_mode</span>
+    </button>
     <div class="container">
         <!-- Logo -->
         <div class="logo-section">

@@ -17,6 +17,8 @@ $name = $_SESSION['name'];
   <title>ECUSTA — Teacher Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <script src="js/theme.js"></script>
   <?php if (@$_GET['w']) {
     echo '<script>window.addEventListener("DOMContentLoaded",function(){showAlert("' . htmlspecialchars(@$_GET['w'], ENT_QUOTES) . '","error");});</script>';
   } ?>
@@ -31,16 +33,16 @@ $name = $_SESSION['name'];
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #0e1a2b;
-      color: #e0e6ed;
+      background: var(--bg-primary);
+      color: var(--text-secondary);
       min-height: 100vh;
       display: flex;
     }
 
     .sidebar {
       width: 250px;
-      background: linear-gradient(180deg, #132238 0%, #0d1929 100%);
-      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border-primary);
       display: flex;
       flex-direction: column;
       position: fixed;
@@ -55,7 +57,7 @@ $name = $_SESSION['name'];
       display: flex;
       align-items: center;
       gap: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid var(--border-primary);
     }
 
     .sidebar-brand img {
@@ -69,7 +71,7 @@ $name = $_SESSION['name'];
     .sidebar-brand span {
       font-size: 16px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-primary);
     }
 
     .sidebar-label {
@@ -78,7 +80,7 @@ $name = $_SESSION['name'];
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 2px;
-      color: rgba(255, 255, 255, 0.25);
+      color: var(--text-faint);
     }
 
     .sidebar-nav {
@@ -96,7 +98,7 @@ $name = $_SESSION['name'];
       gap: 12px;
       padding: 12px 16px;
       border-radius: 10px;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--sidebar-text);
       text-decoration: none;
       font-size: 14px;
       font-weight: 500;
@@ -104,13 +106,13 @@ $name = $_SESSION['name'];
     }
 
     .nav-item:hover {
-      background: rgba(255, 255, 255, 0.06);
-      color: rgba(255, 255, 255, 0.85);
+      background: var(--bg-card-hover);
+      color: var(--sidebar-text-hover);
     }
 
     .nav-item.active {
-      background: rgba(79, 172, 254, 0.12);
-      color: #4facfe;
+      background: var(--sidebar-active-bg);
+      color: var(--sidebar-active-text);
     }
 
     .nav-item .material-icons {
@@ -119,7 +121,7 @@ $name = $_SESSION['name'];
 
     .sidebar-footer {
       padding: 16px 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-top: 1px solid var(--border-primary);
     }
 
     .sidebar-footer .user-info {
@@ -133,25 +135,25 @@ $name = $_SESSION['name'];
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #a885ff, #e572ff);
+      background: var(--accent-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
       font-weight: 700;
-      color: #1a0a2e;
+      color: var(--bg-primary);
       flex-shrink: 0;
     }
 
     .sidebar-footer .user-name {
       font-size: 13px;
       font-weight: 600;
-      color: #fff;
+      color: var(--text-primary);
     }
 
     .sidebar-footer .user-email {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--text-dimmed);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -164,7 +166,7 @@ $name = $_SESSION['name'];
       gap: 8px;
       padding: 10px 16px;
       border-radius: 10px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--text-dimmed);
       text-decoration: none;
       font-size: 13px;
       transition: all 0.2s ease;
@@ -172,8 +174,8 @@ $name = $_SESSION['name'];
     }
 
     .btn-signout:hover {
-      background: rgba(255, 65, 108, 0.12);
-      color: #ff416c;
+      background: var(--danger-bg);
+      color: var(--danger);
     }
 
     .main {
@@ -190,19 +192,19 @@ $name = $_SESSION['name'];
     .page-header h1 {
       font-size: 24px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-primary);
       margin-bottom: 4px;
     }
 
     .page-header p {
       font-size: 13px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--text-dimmed);
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--bg-card);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-primary);
       border-radius: 16px;
       padding: 24px;
       margin-bottom: 24px;
@@ -220,19 +222,19 @@ $name = $_SESSION['name'];
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.35);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--table-header-color);
+      border-bottom: 1px solid var(--border-primary);
     }
 
     .data-table td {
       padding: 14px 16px;
       font-size: 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      color: rgba(255, 255, 255, 0.75);
+      border-bottom: 1px solid var(--table-border);
+      color: var(--text-muted);
     }
 
     .data-table tbody tr:hover {
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--table-row-hover);
     }
 
     .badge-done {
@@ -243,8 +245,8 @@ $name = $_SESSION['name'];
       border-radius: 20px;
       font-size: 11px;
       font-weight: 600;
-      background: rgba(56, 239, 125, 0.12);
-      color: #38ef7d;
+      background: var(--success-bg);
+      color: var(--success);
     }
 
     .btn-action {
@@ -262,23 +264,23 @@ $name = $_SESSION['name'];
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-      color: #0e1a2b;
+      background: var(--accent-gradient);
+      color: var(--bg-primary);
     }
 
     .btn-primary:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+      box-shadow: 0 4px 15px var(--shadow-color);
     }
 
     .btn-danger {
-      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      background: linear-gradient(135deg, var(--danger), #ff4b2b);
       color: #fff;
     }
 
     .btn-danger:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
+      box-shadow: 0 4px 15px var(--shadow-color);
     }
 
     .btn-submit {
@@ -290,15 +292,15 @@ $name = $_SESSION['name'];
       font-weight: 600;
       cursor: pointer;
       border: none;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-      color: #0e1a2b;
+      background: var(--accent-gradient);
+      color: var(--bg-primary);
       transition: all 0.2s ease;
       margin-top: 8px;
     }
 
     .btn-submit:hover {
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(79, 172, 254, 0.3);
+      box-shadow: 0 6px 20px var(--shadow-color);
     }
 
     .form-group {
@@ -309,7 +311,7 @@ $name = $_SESSION['name'];
       display: block;
       font-size: 12px;
       font-weight: 500;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--text-muted);
       margin-bottom: 8px;
       letter-spacing: 0.5px;
       text-transform: uppercase;
@@ -320,10 +322,10 @@ $name = $_SESSION['name'];
     .form-group select {
       width: 100%;
       padding: 13px 16px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--bg-input);
+      border: 1px solid var(--border-input);
       border-radius: 10px;
-      color: #fff;
+      color: var(--text-primary);
       font-family: 'Inter', sans-serif;
       font-size: 14px;
       outline: none;
@@ -332,14 +334,14 @@ $name = $_SESSION['name'];
 
     .form-group input::placeholder,
     .form-group textarea::placeholder {
-      color: rgba(255, 255, 255, 0.25);
+      color: var(--text-input-placeholder);
     }
 
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
-      border-color: rgba(79, 172, 254, 0.5);
-      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--border-input-focus);
+      background: var(--bg-input-focus);
     }
 
     .form-group textarea {
@@ -348,7 +350,7 @@ $name = $_SESSION['name'];
     }
 
     .form-group select option {
-      background: #132238;
+      background: var(--select-option-bg);
     }
 
     .form-row {
@@ -361,16 +363,16 @@ $name = $_SESSION['name'];
     }
 
     .question-block {
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-primary);
       border-radius: 12px;
       padding: 20px;
       margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--bg-card);
     }
 
     .question-block h3 {
       font-size: 14px;
-      color: #4facfe;
+      color: var(--accent);
       margin-bottom: 16px;
     }
 
@@ -385,11 +387,11 @@ $name = $_SESSION['name'];
       font-weight: 500;
       z-index: 9999;
       animation: slideIn 0.4s ease, fadeOut 0.4s ease 4s forwards;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 32px var(--shadow-color);
     }
 
     .alert-toast.error {
-      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      background: linear-gradient(135deg, var(--danger), #ff4b2b);
     }
 
     @keyframes slideIn {
@@ -416,11 +418,11 @@ $name = $_SESSION['name'];
       top: 16px;
       left: 16px;
       z-index: 200;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
       border-radius: 10px;
       padding: 8px;
-      color: #fff;
+      color: var(--text-primary);
       cursor: pointer;
     }
 
@@ -487,6 +489,11 @@ $name = $_SESSION['name'];
       </a>
     </div>
     <div class="sidebar-footer">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 10px 8px">
+        <button class="theme-toggle" title="Toggle dark/light mode">
+          <span class="material-icons">light_mode</span>
+        </button>
+      </div>
       <div class="user-info">
         <div class="avatar"><?php echo strtoupper(substr($email, 0, 1)); ?></div>
         <div>
@@ -519,6 +526,7 @@ $name = $_SESSION['name'];
               <th>+</th>
               <th>−</th>
               <th>Time</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -526,7 +534,8 @@ $name = $_SESSION['name'];
             $result = mysqli_query($con, "SELECT * FROM quiz WHERE email='$email' ORDER BY date DESC") or die('Error');
             $c = 1;
             while ($row = mysqli_fetch_array($result)) {
-              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['sahi'] . '</td><td>' . $row['wrong'] . '</td><td>' . $row['time'] . ' min</td></tr>';
+              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['sahi'] . '</td><td>' . $row['wrong'] . '</td><td>' . $row['time'] . ' min</td>
+              <td><a href="dash.php?q=manage_quiz&eid=' . $row['eid'] . '" class="btn-action btn-primary" style="margin-right:5px"><span class="material-icons" style="font-size:16px">edit</span> Manage</a></td></tr>';
             }
             ?>
           </tbody>
@@ -618,6 +627,10 @@ $name = $_SESSION['name'];
             <label>Quiz Title</label>
             <input name="name" type="text" placeholder="e.g. Data Structures Midterm" required>
           </div>
+          <div class="form-group">
+            <label>Access Code (Mandatory)</label>
+            <input name="access_code" type="text" placeholder="e.g. A1B2C3" maxlength="20" required>
+          </div>
           <div class="form-row">
             <div class="form-group">
               <label>Total Questions</label>
@@ -642,6 +655,23 @@ $name = $_SESSION['name'];
             <label>Tag</label>
             <input name="tag" type="text" placeholder="e.g. #midterm #cs">
           </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Target Department (Optional)</label>
+              <input name="target_dept" type="text" placeholder="e.g. Computer Science (Leave empty for all)">
+            </div>
+            <div class="form-group">
+              <label>Target Year (Optional)</label>
+              <select name="target_year" style="appearance:auto;padding:13px 16px;">
+                <option value="">All Years</option>
+                <option value="1st Year">1st Year</option>
+                <option value="2nd Year">2nd Year</option>
+                <option value="3rd Year">3rd Year</option>
+                <option value="4th Year">4th Year</option>
+                <option value="5th Year">5th Year</option>
+              </select>
+            </div>
+          </div>
           <div class="form-group">
             <label>Description</label>
             <textarea name="desc" placeholder="Write quiz description..."></textarea>
@@ -661,45 +691,105 @@ $name = $_SESSION['name'];
         <form action="update.php?q=addqns&n=<?php echo @$_GET['n']; ?>&eid=<?php echo @$_GET['eid']; ?>&ch=4"
           method="POST">
           <?php for ($i = 1; $i <= @$_GET['n']; $i++) { ?>
-            <div class="question-block">
-              <h3>Question <?php echo $i; ?></h3>
+            <div class="question-block" id="q-block-<?php echo $i; ?>">
+              <div class="form-row">
+                <h3 style="flex:1">Question <?php echo $i; ?></h3>
+                <div class="form-group" style="max-width:200px">
+                  <select name="type<?php echo $i; ?>" onchange="toggleQuestionType(<?php echo $i; ?>, this.value)"
+                    style="padding:8px;font-size:12px">
+                    <option value="mcq">Multiple Choice</option>
+                    <option value="short">Short Answer</option>
+                    <option value="code">Code Snippet</option>
+                    <option value="match">Matching</option>
+                  </select>
+                </div>
+              </div>
+
               <div class="form-group">
                 <label>Question Text</label>
                 <textarea name="qns<?php echo $i; ?>" placeholder="Enter question..." required></textarea>
               </div>
-              <div class="form-row">
-                <div class="form-group">
-                  <label>Option A</label>
-                  <input name="<?php echo $i; ?>1" type="text" placeholder="Option A" required>
+
+              <!-- MCQ Inputs -->
+              <div id="mcq-<?php echo $i; ?>" class="type-input">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Option A</label>
+                    <input name="<?php echo $i; ?>1" type="text" placeholder="Option A">
+                  </div>
+                  <div class="form-group">
+                    <label>Option B</label>
+                    <input name="<?php echo $i; ?>2" type="text" placeholder="Option B">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Option C</label>
+                    <input name="<?php echo $i; ?>3" type="text" placeholder="Option C">
+                  </div>
+                  <div class="form-group">
+                    <label>Option D</label>
+                    <input name="<?php echo $i; ?>4" type="text" placeholder="Option D">
+                  </div>
                 </div>
                 <div class="form-group">
-                  <label>Option B</label>
-                  <input name="<?php echo $i; ?>2" type="text" placeholder="Option B" required>
+                  <label>Correct Answer</label>
+                  <select name="ans<?php echo $i; ?>" style="appearance:auto">
+                    <option value="a">Option A</option>
+                    <option value="b">Option B</option>
+                    <option value="c">Option C</option>
+                    <option value="d">Option D</option>
+                  </select>
                 </div>
               </div>
-              <div class="form-row">
+
+              <!-- Short Answer & Code Inputs -->
+              <div id="short-<?php echo $i; ?>" class="type-input" style="display:none">
                 <div class="form-group">
-                  <label>Option C</label>
-                  <input name="<?php echo $i; ?>3" type="text" placeholder="Option C" required>
-                </div>
-                <div class="form-group">
-                  <label>Option D</label>
-                  <input name="<?php echo $i; ?>4" type="text" placeholder="Option D" required>
+                  <label>Correct Answer (Exact Match)</label>
+                  <textarea name="ans_text<?php echo $i; ?>" placeholder="Enter the correct answer text..."></textarea>
                 </div>
               </div>
-              <div class="form-group">
-                <label>Correct Answer</label>
-                <select name="ans<?php echo $i; ?>" style="appearance:auto" required>
-                  <option value="a">Option A</option>
-                  <option value="b">Option B</option>
-                  <option value="c">Option C</option>
-                  <option value="d">Option D</option>
-                </select>
+
+              <!-- Matching Inputs -->
+              <div id="match-<?php echo $i; ?>" class="type-input" style="display:none">
+                <p style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:10px">Enter matching pairs. They will be
+                  shuffled for students.</p>
+                <?php for ($k = 1; $k <= 4; $k++) { ?>
+                  <div class="form-row" style="margin-bottom:8px">
+                    <input name="match_left_<?php echo $i; ?>_<?php echo $k; ?>" type="text"
+                      placeholder="Item <?php echo $k; ?> Left" style="flex:1">
+                    <span style="padding-top:10px">=</span>
+                    <input name="match_right_<?php echo $i; ?>_<?php echo $k; ?>" type="text"
+                      placeholder="Item <?php echo $k; ?> Right" style="flex:1">
+                  </div>
+                <?php } ?>
               </div>
+
             </div>
           <?php } ?>
-          <button type="submit" class="btn-submit">Save All Questions</button>
+          <button type="submit" class="btn-submit">Submit Questions</button>
         </form>
+      </div>
+      <script>
+        function toggleQuestionType(id, type) {
+          // Hide all inputs for this question
+          document.getElementById('mcq-' + id).style.display = 'none';
+          document.getElementById('short-' + id).style.display = 'none';
+          document.getElementById('match-' + id).style.display = 'none';
+
+          // Show selected
+          if (type === 'mcq') {
+            document.getElementById('mcq-' + id).style.display = 'block';
+          } else if (type === 'short' || type === 'code') {
+            document.getElementById('short-' + id).style.display = 'block'; // 'short' covers both text/code inputs for answer
+          } else if (type === 'match') {
+            document.getElementById('match-' + id).style.display = 'block';
+          }
+        }
+      </script>
+      <button type="submit" class="btn-submit">Save All Questions</button>
+      </form>
       </div>
     <?php } ?>
 
@@ -732,6 +822,164 @@ $name = $_SESSION['name'];
             ?>
           </tbody>
         </table>
+      </div>
+    <?php } ?>
+
+    <!-- MANAGE QUIZ (Teacher) -->
+    <?php if (@$_GET['q'] == 'manage_quiz') {
+      $eid = @$_GET['eid'];
+      $q = mysqli_query($con, "SELECT * FROM quiz WHERE eid='$eid' AND email='$email' ");
+      while ($row = mysqli_fetch_array($q)) {
+        $title = $row['title'];
+        $total = $row['total'];
+        $sahi = $row['sahi'];
+        $wrong = $row['wrong'];
+        $time = $row['time'];
+        $tag = $row['tag'];
+        $intro = $row['intro'];
+        $target_dept = $row['target_dept'];
+        $target_year = $row['target_year'];
+      }
+      ?>
+      <div class="page-header">
+        <h1>Manage Quiz: <?php echo $title; ?></h1>
+        <p>Edit details and questions</p>
+      </div>
+
+      <!-- Quiz Details Form -->
+      <div class="card">
+        <h3>Quiz Details</h3>
+        <form action="update.php?q=editquiz&eid=<?php echo $eid; ?>" method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Quiz Title</label>
+              <input name="name" type="text" value="<?php echo $title; ?>" required>
+            </div>
+            <div class="form-group">
+              <label>Time Limit (min)</label>
+              <input name="time" type="number" value="<?php echo $time; ?>" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Target Dept</label>
+              <input name="target_dept" type="text" value="<?php echo $target_dept; ?>" placeholder="Leave empty for all">
+            </div>
+            <div class="form-group">
+              <label>Target Year</label>
+              <select name="target_year" style="appearance:auto;padding:13px 16px;">
+                <option value="" <?php if ($target_year == '')
+                  echo 'selected'; ?>>All Years</option>
+                <option value="1st Year" <?php if ($target_year == '1st Year')
+                  echo 'selected'; ?>>1st Year</option>
+                <option value="2nd Year" <?php if ($target_year == '2nd Year')
+                  echo 'selected'; ?>>2nd Year</option>
+                <option value="3rd Year" <?php if ($target_year == '3rd Year')
+                  echo 'selected'; ?>>3rd Year</option>
+                <option value="4th Year" <?php if ($target_year == '4th Year')
+                  echo 'selected'; ?>>4th Year</option>
+                <option value="5th Year" <?php if ($target_year == '5th Year')
+                  echo 'selected'; ?>>5th Year</option>
+              </select>
+            </div>
+          </div>
+          <button type="submit" class="btn-submit" style="width:auto;padding:10px 24px">Update Details</button>
+        </form>
+      </div>
+
+      <!-- Questions List -->
+      <div class="card">
+        <h3>Questions</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Question</th>
+              <th>Type</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $q = mysqli_query($con, "SELECT * FROM questions WHERE eid='$eid' ORDER BY sn ASC");
+            while ($row = mysqli_fetch_array($q)) {
+              $qid = $row['qid'];
+              $qns = $row['qns'];
+              $sn = $row['sn'];
+              $type = $row['question_type'];
+              if (empty($type))
+                $type = 'mcq';
+              echo '<tr><td>' . $sn . '</td><td>' . htmlspecialchars($qns) . '</td><td>' . strtoupper($type) . '</td>
+              <td><a href="dash.php?q=edit_question&qid=' . $qid . '" class="btn-action btn-primary"><span class="material-icons" style="font-size:16px">edit</span> Edit</a></td></tr>';
+            }
+            ?>
+          </tbody>
+        </table>
+        <div style="margin-top:16px">
+          <a href="dash.php?q=4&step=2&eid=<?php echo $eid; ?>&n=1" class="btn-action btn-primary"
+            style="display:inline-block">+ Add Question</a>
+        </div>
+      </div>
+    <?php } ?>
+
+    <!-- EDIT QUESTION (Teacher) -->
+    <?php if (@$_GET['q'] == 'edit_question') {
+      $qid = @$_GET['qid'];
+      $q = mysqli_query($con, "SELECT * FROM questions WHERE qid='$qid'");
+      while ($row = mysqli_fetch_array($q)) {
+        $qns = $row['qns'];
+        $eid = $row['eid'];
+        $type = $row['question_type'];
+        if (empty($type))
+          $type = 'mcq';
+      }
+      ?>
+      <div class="page-header">
+        <h1>Edit Question</h1>
+      </div>
+      <div class="card" style="max-width:700px">
+        <form action="update.php?q=editqns&qid=<?php echo $qid; ?>" method="POST">
+          <input type="hidden" name="eid" value="<?php echo $eid; ?>">
+          <div class="form-group">
+            <label>Question Text</label>
+            <textarea name="qns" required><?php echo htmlspecialchars(stripslashes($qns)); ?></textarea>
+          </div>
+
+          <?php if ($type == 'mcq') {
+            $options = [];
+            $q2 = mysqli_query($con, "SELECT * FROM options WHERE qid='$qid'");
+            while ($row2 = mysqli_fetch_array($q2)) {
+              $options[$row2['optionid']] = $row2['option'];
+            }
+            // Need to map options to A, B, C, D... simpler to just list them inputs
+            // But we need to identify which is correct.
+            // Correct answer is in 'answer' table.
+            $q3 = mysqli_query($con, "SELECT * FROM answer WHERE qid='$qid'");
+            $ansid = '';
+            while ($row3 = mysqli_fetch_array($q3)) {
+              $ansid = $row3['ansid'];
+            }
+            $i = 1;
+            foreach ($options as $oid => $opt) {
+              echo '<div class="form-group"><label>Option ' . $i . '</label>';
+              echo '<input name="option[]" type="text" value="' . htmlspecialchars(stripslashes($opt)) . '" required>';
+              echo '<input name="oid[]" type="hidden" value="' . $oid . '">';
+              echo '<div style="margin-top:4px"><input type="radio" name="ans" value="' . $oid . '" ' . ($ansid == $oid ? 'checked' : '') . '> Correct Answer</div>';
+              echo '</div>';
+              $i++;
+            }
+          } else if ($type == 'short' || $type == 'code') {
+            $q3 = mysqli_query($con, "SELECT * FROM answer WHERE qid='$qid'");
+            $ans_text = '';
+            while ($row3 = mysqli_fetch_array($q3)) {
+              $ans_text = $row3['ansid'];
+            }
+            echo '<div class="form-group"><label>Correct Answer</label>';
+            echo '<textarea name="ans_text" required>' . $ans_text . '</textarea></div>';
+          }
+          ?>
+          <button type="submit" class="btn-submit">Update Question</button>
+        </form>
       </div>
     <?php } ?>
 

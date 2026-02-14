@@ -7,6 +7,15 @@ if (!(isset($_SESSION['email']))) {
 }
 $name = $_SESSION['name'];
 $email = $_SESSION['email'];
+
+// Fetch user details for targeting
+$q_user = mysqli_query($con, "SELECT * FROM user WHERE email='$email'");
+$user_college = '';
+$user_year = '';
+while ($row_u = mysqli_fetch_array($q_user)) {
+  $user_college = $row_u['college'];
+  $user_year = $row_u['year'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +26,8 @@ $email = $_SESSION['email'];
   <title>ECUSTA — Student Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
+  <script src="js/theme.js"></script>
   <?php if (@$_GET['w']) {
     echo '<script>window.addEventListener("DOMContentLoaded",function(){showAlert("' . htmlspecialchars(@$_GET['w'], ENT_QUOTES) . '","error");});</script>';
   } ?>
@@ -31,8 +42,8 @@ $email = $_SESSION['email'];
 
     body {
       font-family: 'Inter', sans-serif;
-      background: #0e1a2b;
-      color: #e0e6ed;
+      background: var(--bg-primary);
+      color: var(--text-secondary);
       min-height: 100vh;
       display: flex;
     }
@@ -40,8 +51,8 @@ $email = $_SESSION['email'];
     /* Sidebar */
     .sidebar {
       width: 250px;
-      background: linear-gradient(180deg, #132238 0%, #0d1929 100%);
-      border-right: 1px solid rgba(255, 255, 255, 0.06);
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border-primary);
       display: flex;
       flex-direction: column;
       position: fixed;
@@ -56,7 +67,7 @@ $email = $_SESSION['email'];
       display: flex;
       align-items: center;
       gap: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid var(--border-primary);
     }
 
     .sidebar-brand img {
@@ -70,7 +81,7 @@ $email = $_SESSION['email'];
     .sidebar-brand span {
       font-size: 16px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-primary);
       letter-spacing: 0.5px;
     }
 
@@ -88,7 +99,7 @@ $email = $_SESSION['email'];
       gap: 12px;
       padding: 12px 16px;
       border-radius: 10px;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--sidebar-text);
       text-decoration: none;
       font-size: 14px;
       font-weight: 500;
@@ -96,13 +107,13 @@ $email = $_SESSION['email'];
     }
 
     .nav-item:hover {
-      background: rgba(255, 255, 255, 0.06);
-      color: rgba(255, 255, 255, 0.85);
+      background: var(--bg-card-hover);
+      color: var(--sidebar-text-hover);
     }
 
     .nav-item.active {
-      background: rgba(79, 172, 254, 0.12);
-      color: #4facfe;
+      background: var(--sidebar-active-bg);
+      color: var(--sidebar-active-text);
     }
 
     .nav-item .material-icons {
@@ -111,7 +122,7 @@ $email = $_SESSION['email'];
 
     .sidebar-footer {
       padding: 16px 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-top: 1px solid var(--border-primary);
     }
 
     .sidebar-footer .user-info {
@@ -125,13 +136,13 @@ $email = $_SESSION['email'];
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      background: var(--accent-gradient);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
       font-weight: 700;
-      color: #0e1a2b;
+      color: var(--bg-primary);
       flex-shrink: 0;
     }
 
@@ -142,7 +153,7 @@ $email = $_SESSION['email'];
     .sidebar-footer .user-name {
       font-size: 13px;
       font-weight: 600;
-      color: #fff;
+      color: var(--text-primary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -151,7 +162,7 @@ $email = $_SESSION['email'];
 
     .sidebar-footer .user-email {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--text-dimmed);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -164,7 +175,7 @@ $email = $_SESSION['email'];
       gap: 8px;
       padding: 10px 16px;
       border-radius: 10px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--text-dimmed);
       text-decoration: none;
       font-size: 13px;
       transition: all 0.2s ease;
@@ -172,8 +183,8 @@ $email = $_SESSION['email'];
     }
 
     .btn-signout:hover {
-      background: rgba(255, 65, 108, 0.12);
-      color: #ff416c;
+      background: var(--danger-bg);
+      color: var(--danger);
     }
 
     /* Main content */
@@ -191,20 +202,20 @@ $email = $_SESSION['email'];
     .page-header h1 {
       font-size: 24px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-primary);
       margin-bottom: 4px;
     }
 
     .page-header p {
       font-size: 13px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--text-dimmed);
     }
 
     /* Cards / panels */
     .card {
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--bg-card);
       backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-primary);
       border-radius: 16px;
       padding: 24px;
       margin-bottom: 24px;
@@ -223,19 +234,19 @@ $email = $_SESSION['email'];
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.35);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--table-header-color);
+      border-bottom: 1px solid var(--border-primary);
     }
 
     .data-table td {
       padding: 14px 16px;
       font-size: 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      color: rgba(255, 255, 255, 0.75);
+      border-bottom: 1px solid var(--table-border);
+      color: var(--text-muted);
     }
 
     .data-table tbody tr:hover {
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--table-row-hover);
     }
 
     .data-table .badge-done {
@@ -246,8 +257,8 @@ $email = $_SESSION['email'];
       border-radius: 20px;
       font-size: 11px;
       font-weight: 600;
-      background: rgba(56, 239, 125, 0.12);
-      color: #38ef7d;
+      background: var(--success-bg);
+      color: var(--success);
     }
 
     /* Buttons */
@@ -260,8 +271,8 @@ $email = $_SESSION['email'];
       font-size: 13px;
       font-weight: 600;
       text-decoration: none;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-      color: #0e1a2b;
+      background: var(--accent-gradient);
+      color: var(--bg-primary);
       transition: all 0.2s ease;
       border: none;
       cursor: pointer;
@@ -269,7 +280,7 @@ $email = $_SESSION['email'];
 
     .btn-start:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
+      box-shadow: 0 4px 15px var(--shadow-color);
     }
 
     /* Quiz description panel */
@@ -280,19 +291,19 @@ $email = $_SESSION['email'];
     .quiz-desc h2 {
       font-size: 20px;
       font-weight: 700;
-      color: #fff;
+      color: var(--text-primary);
       text-align: center;
       margin-bottom: 16px;
     }
 
     .quiz-desc .meta {
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--text-muted);
       font-size: 13px;
       margin-bottom: 12px;
     }
 
     .quiz-desc .intro {
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--text-secondary);
       line-height: 1.7;
     }
 
@@ -300,7 +311,7 @@ $email = $_SESSION['email'];
     .quiz-question {
       font-size: 16px;
       font-weight: 600;
-      color: #fff;
+      color: var(--text-primary);
       margin-bottom: 20px;
       line-height: 1.6;
     }
@@ -308,23 +319,23 @@ $email = $_SESSION['email'];
     .quiz-option {
       display: block;
       padding: 14px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-input);
       border-radius: 10px;
       margin-bottom: 10px;
       cursor: pointer;
       transition: all 0.2s ease;
-      color: rgba(255, 255, 255, 0.7);
+      color: var(--text-secondary);
       font-size: 14px;
     }
 
     .quiz-option:hover {
-      background: rgba(79, 172, 254, 0.08);
-      border-color: rgba(79, 172, 254, 0.3);
+      background: var(--sidebar-active-bg);
+      border-color: var(--accent);
     }
 
     .quiz-option input[type="radio"] {
       margin-right: 10px;
-      accent-color: #4facfe;
+      accent-color: var(--accent);
     }
 
     /* Result */
@@ -335,7 +346,7 @@ $email = $_SESSION['email'];
 
     .result-card h2 {
       font-size: 22px;
-      color: #fff;
+      color: var(--text-primary);
       margin-bottom: 24px;
     }
 
@@ -349,15 +360,15 @@ $email = $_SESSION['email'];
     .result-stat {
       padding: 18px;
       border-radius: 12px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
     }
 
     .result-stat .label {
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.4);
+      color: var(--text-dimmed);
       margin-bottom: 6px;
     }
 
@@ -367,19 +378,19 @@ $email = $_SESSION['email'];
     }
 
     .result-stat .value.correct {
-      color: #38ef7d;
+      color: var(--success);
     }
 
     .result-stat .value.wrong {
-      color: #ff416c;
+      color: var(--danger);
     }
 
     .result-stat .value.score {
-      color: #4facfe;
+      color: var(--accent);
     }
 
     .result-stat .value.total {
-      color: #a885ff;
+      color: var(--purple);
     }
 
     /* Alert */
@@ -394,11 +405,11 @@ $email = $_SESSION['email'];
       font-weight: 500;
       z-index: 9999;
       animation: slideIn 0.4s ease, fadeOut 0.4s ease 4s forwards;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 32px var(--shadow-color);
     }
 
     .alert-toast.error {
-      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      background: linear-gradient(135deg, var(--danger), #ff4b2b);
     }
 
     @keyframes slideIn {
@@ -426,11 +437,11 @@ $email = $_SESSION['email'];
       top: 16px;
       left: 16px;
       z-index: 200;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--bg-card);
+      border: 1px solid var(--border-primary);
       border-radius: 10px;
       padding: 8px;
-      color: #fff;
+      color: var(--text-primary);
       cursor: pointer;
     }
 
@@ -477,12 +488,14 @@ $email = $_SESSION['email'];
         echo 'active'; ?>">
         <span class="material-icons">history</span> History
       </a>
-      <a href="account.php?q=3" class="nav-item <?php if (@$_GET['q'] == 3)
-        echo 'active'; ?>">
-        <span class="material-icons">leaderboard</span> Ranking
-      </a>
+
     </div>
     <div class="sidebar-footer">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 10px 8px">
+        <button class="theme-toggle" title="Toggle dark/light mode">
+          <span class="material-icons">light_mode</span>
+        </button>
+      </div>
       <div class="user-info">
         <div class="avatar"><?php echo strtoupper(substr($name, 0, 1)); ?></div>
         <div>
@@ -525,6 +538,16 @@ $email = $_SESSION['email'];
             $result = mysqli_query($con, "SELECT * FROM quiz ORDER BY date DESC") or die('Error');
             $c = 1;
             while ($row = mysqli_fetch_array($result)) {
+              $target_dept = $row['target_dept'];
+              $target_year = $row['target_year'];
+
+              // Check if user matches target
+              $dept_match = empty($target_dept) || (stripos($user_college, $target_dept) !== false);
+              $year_match = empty($target_year) || ($user_year == $target_year);
+
+              if (!$dept_match || !$year_match) {
+                continue;
+              }
               $title = $row['title'];
               $total = $row['total'];
               $sahi = $row['sahi'];
@@ -536,7 +559,7 @@ $email = $_SESSION['email'];
               if ($rowcount == 0) {
                 echo '<tr><td>' . $c++ . '</td><td>' . $title . '</td><td>' . $total . '</td><td>' . ($sahi * $total) . '</td><td>' . $sahi . '</td><td>' . $wrong . '</td><td>' . $time . ' min</td>';
                 echo '<td><a href="account.php?q=1&fid=' . $eid . '" title="View description" style="color:#4facfe"><span class="material-icons" style="font-size:18px">description</span></a></td>';
-                echo '<td><a href="account.php?q=quiz&step=2&eid=' . $eid . '&n=1&t=' . $total . '" class="btn-start"><span class="material-icons" style="font-size:16px">play_arrow</span> Start</a></td></tr>';
+                echo '<td><a href="account.php?q=access&eid=' . $eid . '" class="btn-start"><span class="material-icons" style="font-size:16px">play_arrow</span> Start</a></td></tr>';
               } else {
                 echo '<tr><td>' . $c++ . '</td><td>' . $title . ' <span class="badge-done"><span class="material-icons" style="font-size:12px">check</span> Done</span></td><td>' . $total . '</td><td>' . ($sahi * $total) . '</td><td>' . $sahi . '</td><td>' . $wrong . '</td><td>' . $time . ' min</td><td></td><td></td></tr>';
               }
@@ -559,25 +582,975 @@ $email = $_SESSION['email'];
       }
     } ?>
 
-    <!-- QUIZ TAKING -->
-    <?php if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2) {
+    <!-- MOODLE-STYLE EXAM INSTRUCTIONS PAGE -->
+    <?php if (@$_GET['q'] == 'access' && @$_GET['eid']) {
       $eid = @$_GET['eid'];
-      $sn = @$_GET['n'];
-      $total = @$_GET['t'];
-      $q = mysqli_query($con, "SELECT * FROM questions WHERE eid='$eid' AND sn='$sn'");
-      echo '<div class="page-header"><h1>Exam in Progress</h1><p>Question ' . $sn . ' of ' . $total . '</p></div><div class="card">';
-      while ($row = mysqli_fetch_array($q)) {
-        $qns = $row['qns'];
-        $qid = $row['qid'];
-        echo '<div class="quiz-question">Q' . $sn . '. ' . $qns . '</div>';
+      $q = mysqli_query($con, "SELECT * FROM quiz WHERE eid='$eid'");
+      $row = mysqli_fetch_array($q);
+      $title = $row['title'];
+      $total = $row['total'];
+      $sahi = $row['sahi'];
+      $wrong = $row['wrong'];
+      $time = $row['time'];
+      $intro = $row['intro'];
+      $date = date("d-m-Y", strtotime($row['date']));
+      $access_code = $row['access_code'];
+      ?>
+      <style>
+        .exam-intro {
+          max-width: 700px;
+          margin: 0 auto;
+        }
+
+        .exam-intro-header {
+          text-align: center;
+          padding: 32px 0 24px;
+        }
+
+        .exam-intro-header h1 {
+          font-size: 28px;
+          color: var(--text-primary);
+          margin-bottom: 8px;
+        }
+
+        .exam-intro-header .exam-badge {
+          display: inline-block;
+          padding: 4px 16px;
+          background: var(--sidebar-active-bg);
+          color: var(--accent);
+          border-radius: 20px;
+          font-size: 12px;
+          font-weight: 600;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+        }
+
+        .exam-details-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+          gap: 12px;
+          margin-bottom: 24px;
+        }
+
+        .exam-detail-card {
+          padding: 16px;
+          border-radius: 12px;
+          background: var(--bg-card);
+          border: 1px solid var(--border-primary);
+          text-align: center;
+        }
+
+        .exam-detail-card .detail-icon {
+          font-size: 28px;
+          margin-bottom: 6px;
+        }
+
+        .exam-detail-card .detail-label {
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: var(--text-dimmed);
+          margin-bottom: 4px;
+        }
+
+        .exam-detail-card .detail-value {
+          font-size: 18px;
+          font-weight: 700;
+          color: var(--text-primary);
+        }
+
+        .exam-rules {
+          padding: 24px;
+          margin-bottom: 24px;
+        }
+
+        .exam-rules h3 {
+          font-size: 16px;
+          color: var(--text-primary);
+          margin-bottom: 16px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .exam-rules ul {
+          list-style: none;
+          padding: 0;
+        }
+
+        .exam-rules li {
+          padding: 10px 0;
+          border-bottom: 1px solid var(--table-border);
+          color: var(--text-secondary);
+          font-size: 14px;
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          line-height: 1.5;
+        }
+
+        .exam-rules li:last-child {
+          border-bottom: none;
+        }
+
+        .exam-rules li .material-icons {
+          font-size: 18px;
+          color: var(--warning);
+          margin-top: 2px;
+          flex-shrink: 0;
+        }
+
+        .exam-confirm {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 16px;
+          background: var(--bg-card);
+          border: 1px solid var(--border-primary);
+          border-radius: 10px;
+          margin-bottom: 20px;
+          cursor: pointer;
+        }
+
+        .exam-confirm input[type="checkbox"] {
+          width: 18px;
+          height: 18px;
+          accent-color: var(--accent);
+        }
+
+        .exam-confirm label {
+          color: var(--text-secondary);
+          font-size: 14px;
+          cursor: pointer;
+        }
+
+        .exam-start-btn {
+          width: 100%;
+          padding: 16px;
+          border-radius: 12px;
+          border: none;
+          font-family: 'Inter', sans-serif;
+          font-size: 16px;
+          font-weight: 700;
+          cursor: pointer;
+          background: var(--accent-gradient);
+          color: var(--bg-primary);
+          transition: all 0.3s ease;
+          letter-spacing: 0.5px;
+        }
+
+        .exam-start-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px var(--shadow-color);
+        }
+
+        .exam-start-btn:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+          transform: none;
+        }
+
+        .access-code-input {
+          width: 100%;
+          padding: 14px;
+          border-radius: 10px;
+          border: 1px solid var(--border-input);
+          background: var(--bg-input);
+          color: var(--text-primary);
+          text-align: center;
+          font-size: 20px;
+          letter-spacing: 4px;
+          font-weight: 600;
+          font-family: 'Inter', sans-serif;
+          outline: none;
+          transition: all 0.3s;
+          margin-bottom: 20px;
+        }
+
+        .access-code-input:focus {
+          border-color: var(--border-input-focus);
+          background: var(--bg-input-focus);
+        }
+
+        .access-code-input::placeholder {
+          color: var(--text-input-placeholder);
+          letter-spacing: 1px;
+          font-size: 14px;
+          font-weight: 400;
+        }
+      </style>
+      <div class="exam-intro">
+        <div class="exam-intro-header">
+          <span class="exam-badge">Examination</span>
+          <h1><?php echo $title; ?></h1>
+          <p style="color:var(--text-muted);font-size:13px">Created on <?php echo $date; ?></p>
+        </div>
+
+        <?php if (!empty($intro)) { ?>
+          <div class="card" style="margin-bottom:20px">
+            <h3 style="color:var(--text-primary);font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:8px">
+              <span class="material-icons" style="font-size:20px;color:var(--accent)">info</span> Description
+            </h3>
+            <p style="color:var(--text-secondary);line-height:1.7;font-size:14px"><?php echo $intro; ?></p>
+          </div>
+        <?php } ?>
+
+        <div class="exam-details-grid">
+          <div class="exam-detail-card">
+            <div class="detail-icon" style="color:var(--accent)"><span class="material-icons"
+                style="font-size:28px">quiz</span></div>
+            <div class="detail-label">Questions</div>
+            <div class="detail-value"><?php echo $total; ?></div>
+          </div>
+          <div class="exam-detail-card">
+            <div class="detail-icon" style="color:var(--success)"><span class="material-icons"
+                style="font-size:28px">timer</span></div>
+            <div class="detail-label">Duration</div>
+            <div class="detail-value"><?php echo $time; ?> min</div>
+          </div>
+          <div class="exam-detail-card">
+            <div class="detail-icon" style="color:var(--success)"><span class="material-icons"
+                style="font-size:28px">add_circle</span></div>
+            <div class="detail-label">Per Correct</div>
+            <div class="detail-value">+<?php echo $sahi; ?></div>
+          </div>
+          <div class="exam-detail-card">
+            <div class="detail-icon" style="color:var(--danger)"><span class="material-icons"
+                style="font-size:28px">remove_circle</span></div>
+            <div class="detail-label">Per Wrong</div>
+            <div class="detail-value">-<?php echo $wrong; ?></div>
+          </div>
+        </div>
+
+        <div class="card exam-rules">
+          <h3><span class="material-icons">gavel</span> Exam Rules & Instructions</h3>
+          <ul>
+            <li><span class="material-icons">fullscreen</span> The exam will enter <strong>fullscreen mode</strong>. Do
+              not exit fullscreen during the exam.</li>
+            <li><span class="material-icons">tab</span> <strong>Do not switch tabs</strong> or windows. Tab switching will
+              be detected and counted as a violation.</li>
+            <li><span class="material-icons">warning</span> After <strong>3 violations</strong>, your exam will be
+              <strong>automatically submitted</strong>.
+            </li>
+            <li><span class="material-icons">timer</span> The exam has a strict time limit of <strong><?php echo $time; ?>
+                minutes</strong>. When time runs out, your answers will be submitted automatically.</li>
+            <li><span class="material-icons">flag</span> You can <strong>flag questions</strong> for review and navigate
+              between questions freely.</li>
+            <li><span class="material-icons">block</span> Right-click and keyboard shortcuts are <strong>disabled</strong>
+              during the exam.</li>
+          </ul>
+        </div>
+
+        <form
+          action="<?php echo empty($access_code) ? 'account.php?q=exam&eid=' . $eid : 'update.php?q=checkcode&eid=' . $eid; ?>"
+          method="POST" id="examStartForm">
+          <?php if (!empty($access_code)) { ?>
+            <input name="access_code" type="text" class="access-code-input" placeholder="Enter Access Code" required
+              autocomplete="off">
+          <?php } ?>
+          <div class="exam-confirm" onclick="document.getElementById('confirmCheck').click()">
+            <input type="checkbox" id="confirmCheck"
+              onchange="document.getElementById('startExamBtn').disabled = !this.checked">
+            <label for="confirmCheck">I have read and agree to the exam rules. I understand that violations may result in
+              automatic submission.</label>
+          </div>
+          <button type="submit" class="exam-start-btn" id="startExamBtn" disabled>
+            <span class="material-icons" style="vertical-align:middle;margin-right:6px">play_circle</span>
+            Begin Examination
+          </button>
+        </form>
+        <a href="account.php?q=1"
+          style="display:block;text-align:center;margin-top:16px;color:var(--text-muted);font-size:13px;text-decoration:none">
+          <span class="material-icons" style="font-size:14px;vertical-align:middle">arrow_back</span> Back to Exams
+        </a>
+      </div>
+    <?php } ?>
+
+    <!-- FULL EXAM UI -->
+    <?php if (@$_GET['q'] == 'exam' && @$_GET['eid']) {
+      $eid = @$_GET['eid'];
+      $q = mysqli_query($con, "SELECT * FROM quiz WHERE eid='$eid'");
+      $quiz = mysqli_fetch_assoc($q);
+      $duration = $quiz['time'] * 60; // in seconds
+    
+      // Fetch all questions and options
+      $questions = [];
+      $q_sql = mysqli_query($con, "SELECT * FROM questions WHERE eid='$eid' ORDER BY sn ASC");
+      while ($q_row = mysqli_fetch_assoc($q_sql)) {
+        $qid = $q_row['qid'];
+        $opts_sql = mysqli_query($con, "SELECT * FROM options WHERE qid='$qid'");
+        $options = [];
+        while ($opt_row = mysqli_fetch_assoc($opts_sql)) {
+          $options[] = $opt_row;
+        }
+        $q_row['options'] = $options;
+        // Ensure question_type is available
+        if (!isset($q_row['question_type']))
+          $q_row['question_type'] = 'mcq';
+        $questions[] = $q_row;
       }
-      $q = mysqli_query($con, "SELECT * FROM options WHERE qid='$qid'");
-      echo '<form action="update.php?q=quiz&step=2&eid=' . $eid . '&n=' . $sn . '&t=' . $total . '&qid=' . $qid . '" method="POST">';
-      while ($row = mysqli_fetch_array($q)) {
-        echo '<label class="quiz-option"><input type="radio" name="ans" value="' . $row['optionid'] . '">' . $row['option'] . '</label>';
-      }
-      echo '<br><button type="submit" class="btn-start" style="margin-top:10px"><span class="material-icons" style="font-size:16px">send</span> Submit Answer</button></form></div>';
-    } ?>
+      ?>
+      <style>
+        .sidebar {
+          display: none !important;
+        }
+
+        .menu-toggle {
+          display: none !important;
+        }
+
+        .main {
+          margin-left: 0 !important;
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding-top: 20px;
+        }
+
+        .exam-container {
+          display: flex;
+          gap: 24px;
+          height: calc(100vh - 40px);
+        }
+
+        .question-panel {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .status-panel {
+          width: 300px;
+          background: var(--bg-card);
+          border: 1px solid var(--border-primary);
+          border-radius: 16px;
+          padding: 20px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .timer-box {
+          font-size: 32px;
+          font-weight: 700;
+          text-align: center;
+          margin-bottom: 16px;
+          color: var(--accent);
+          font-feature-settings: "tnum";
+          font-variant-numeric: tabular-nums;
+          padding: 12px;
+          border-radius: 12px;
+          background: var(--sidebar-active-bg);
+        }
+
+        .timer-box.warning {
+          color: var(--danger);
+          background: var(--danger-bg);
+          animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+
+          0%,
+          100% {
+            opacity: 1;
+          }
+
+          50% {
+            opacity: 0.7;
+          }
+        }
+
+        .violation-counter {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          padding: 8px 12px;
+          border-radius: 8px;
+          margin-bottom: 16px;
+          background: var(--danger-bg);
+          color: var(--danger);
+          font-size: 12px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .violation-counter.safe {
+          background: var(--success-bg);
+          color: var(--success);
+        }
+
+        .question-legend {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-bottom: 16px;
+          padding: 12px;
+          border-radius: 10px;
+          background: var(--bg-card);
+          border: 1px solid var(--border-primary);
+        }
+
+        .legend-item {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 11px;
+          color: var(--text-muted);
+        }
+
+        .legend-dot {
+          width: 12px;
+          height: 12px;
+          border-radius: 4px;
+        }
+
+        .legend-dot.not-visited {
+          background: var(--bg-input);
+          border: 1px solid var(--border-input);
+        }
+
+        .legend-dot.current {
+          border: 2px solid var(--accent);
+          background: transparent;
+        }
+
+        .legend-dot.answered {
+          background: var(--success-bg);
+          border: 1px solid var(--success);
+        }
+
+        .legend-dot.flagged {
+          background: rgba(255, 215, 0, 0.2);
+          border: 1px solid var(--warning);
+        }
+
+        .grid-questions {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 8px;
+          overflow-y: auto;
+          padding-right: 4px;
+          flex: 1;
+          align-content: start;
+        }
+
+        .q-btn {
+          aspect-ratio: 1;
+          border-radius: 8px;
+          border: 1px solid var(--border-input);
+          background: var(--bg-input);
+          color: var(--text-muted);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          font-weight: 600;
+          transition: all 0.2s;
+          font-size: 13px;
+        }
+
+        .q-btn:hover {
+          background: var(--bg-card-hover);
+        }
+
+        .q-btn.active {
+          border-color: var(--accent);
+          color: var(--text-primary);
+          box-shadow: 0 0 0 2px var(--sidebar-active-bg);
+        }
+
+        .q-btn.answered {
+          background: var(--success-bg);
+          color: var(--success);
+          border-color: transparent;
+        }
+
+        .q-btn.flagged {
+          background: rgba(255, 215, 0, 0.2);
+          color: var(--warning);
+          border-color: transparent;
+        }
+
+        .q-card {
+          background: var(--bg-card);
+          border: 1px solid var(--border-primary);
+          border-radius: 16px;
+          padding: 40px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          overflow-y: auto;
+          position: relative;
+        }
+
+        .q-text {
+          font-size: 20px;
+          font-weight: 600;
+          line-height: 1.6;
+          margin-bottom: 30px;
+          color: var(--text-primary);
+        }
+
+        .opt-label {
+          display: flex;
+          align-items: center;
+          padding: 16px 20px;
+          background: var(--bg-input);
+          border: 1px solid var(--border-primary);
+          border-radius: 10px;
+          margin-bottom: 12px;
+          cursor: pointer;
+          transition: all 0.2s;
+          color: var(--text-secondary);
+        }
+
+        .opt-label:hover {
+          background: var(--bg-card-hover);
+        }
+
+        .opt-label input {
+          margin-right: 16px;
+          transform: scale(1.2);
+          accent-color: var(--accent);
+        }
+
+        .opt-label.selected {
+          background: var(--sidebar-active-bg);
+          border-color: var(--accent);
+        }
+
+        .nav-btns {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 24px;
+        }
+
+        .btn-nav {
+          padding: 12px 24px;
+          border-radius: 10px;
+          border: none;
+          font-weight: 600;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 15px;
+          transition: all 0.2s;
+        }
+
+        .btn-prev {
+          background: var(--bg-input);
+          color: var(--text-primary);
+        }
+
+        .btn-prev:hover {
+          background: var(--bg-card-hover);
+        }
+
+        .btn-next {
+          background: var(--accent);
+          color: var(--bg-primary);
+        }
+
+        .btn-next:hover {
+          opacity: 0.9;
+        }
+
+        .btn-flag {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: transparent;
+          border: none;
+          color: var(--text-dimmed);
+          cursor: pointer;
+          font-size: 0;
+        }
+
+        .btn-flag .material-icons {
+          font-size: 24px;
+        }
+
+        .btn-flag.active {
+          color: var(--warning);
+        }
+
+        .blur-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(14, 26, 43, 0.97);
+          backdrop-filter: blur(20px);
+          z-index: 9999;
+          display: none;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .blur-overlay h2 {
+          color: #fff;
+        }
+
+        .blur-overlay p {
+          color: rgba(255, 255, 255, 0.7);
+        }
+
+        .exam-progress {
+          width: 100%;
+          height: 4px;
+          background: var(--bg-input);
+          border-radius: 2px;
+          margin-bottom: 16px;
+        }
+
+        .exam-progress-fill {
+          height: 100%;
+          background: var(--accent-gradient);
+          border-radius: 2px;
+          transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+          .exam-container {
+            flex-direction: column-reverse;
+            height: auto;
+          }
+
+          .status-panel {
+            width: 100%;
+          }
+
+          .q-card {
+            padding: 20px;
+          }
+        }
+      </style>
+
+      <div id="lockdown-warning" class="blur-overlay">
+        <span class="material-icons" style="font-size:64px;color:var(--danger);margin-bottom:20px">gpp_bad</span>
+        <h2 style="margin-bottom:10px">⚠ Exam Violation Detected</h2>
+        <p style="margin-bottom:8px">You switched away from the exam tab.</p>
+        <p id="violationMsg" style="color:var(--danger);font-weight:700;font-size:18px;margin-bottom:20px">Violation 1 of
+          3</p>
+        <p style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:20px">After 3 violations, your exam will be
+          automatically submitted.</p>
+        <button onclick="resumeExam()" class="btn-start" style="margin-top:10px;padding:14px 40px;font-size:16px">
+          <span class="material-icons" style="vertical-align:middle;margin-right:6px">play_arrow</span> Resume Exam
+        </button>
+      </div>
+
+      <form id="examForm" action="update.php?q=submitexam&eid=<?php echo $eid; ?>" method="POST" class="exam-container">
+        <div class="status-panel">
+          <div class="timer-box" id="timer">00:00</div>
+          <div class="exam-progress">
+            <div class="exam-progress-fill" id="progressBar" style="width:0%"></div>
+          </div>
+          <div class="violation-counter safe" id="violationDisplay">
+            <span class="material-icons" style="font-size:14px">verified_user</span> No Violations
+          </div>
+          <div class="question-legend">
+            <div class="legend-item">
+              <div class="legend-dot not-visited"></div> Not visited
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot current"></div> Current
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot answered"></div> Answered
+            </div>
+            <div class="legend-item">
+              <div class="legend-dot flagged"></div> Flagged
+            </div>
+          </div>
+          <div
+            style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dimmed);margin-bottom:10px">
+            Questions</div>
+          <div class="grid-questions" id="qGrid"></div>
+          <button type="button" onclick="confirmSubmit()" class="btn-start"
+            style="width:100%;margin-top:20px;background:linear-gradient(135deg, var(--success), #11998e);color:white">
+            <span class="material-icons" style="vertical-align:middle;margin-right:4px;font-size:18px">send</span>
+            Submit Exam
+          </button>
+        </div>
+
+        <div class="question-panel">
+          <div id="qContainer" class="q-card"></div>
+          <div class="nav-btns">
+            <button type="button" id="btnPrev" onclick="prevQ()" class="btn-nav btn-prev">
+              <span class="material-icons">west</span> Previous
+            </button>
+            <button type="button" id="btnNext" onclick="nextQ()" class="btn-nav btn-next">
+              Next <span class="material-icons">east</span>
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <script>
+        const questions = <?php echo json_encode($questions); ?>;
+        const duration = <?php echo $duration; ?>;
+        let timeLeft = duration;
+        let currentIdx = 0;
+        let answers = {};
+        let flags = {};
+        let violationCount = 0;
+        const MAX_VIOLATIONS = 3;
+
+        function init() {
+          renderGrid();
+          showQ(0);
+          startTimer();
+          updateProgress();
+
+          // Enter fullscreen
+          document.documentElement.requestFullscreen().catch(e => console.log(e));
+
+          // Anti-cheat: disable context menu
+          document.addEventListener('contextmenu', event => event.preventDefault());
+
+          // Anti-cheat: visibility change detection with violation counting
+          document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+              violationCount++;
+              updateViolationDisplay();
+              if (violationCount >= MAX_VIOLATIONS) {
+                submitExam();
+                return;
+              }
+              document.getElementById('lockdown-warning').style.display = 'flex';
+              document.getElementById('violationMsg').textContent = `Violation ${violationCount} of ${MAX_VIOLATIONS}`;
+            }
+          });
+
+          // Anti-cheat: fullscreen change detection
+          document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement) {
+              // User exited fullscreen — re-request after a short delay
+              setTimeout(() => {
+                document.documentElement.requestFullscreen().catch(e => console.log(e));
+              }, 300);
+            }
+          });
+
+          // Anti-cheat: block some keyboard shortcuts
+          document.addEventListener('keydown', (e) => {
+            // Block F11, Ctrl+W, Ctrl+T, Ctrl+N, Ctrl+Tab
+            if (e.key === 'F11' || e.key === 'Escape') {
+              e.preventDefault();
+              e.stopPropagation();
+              return false;
+            }
+            if (e.ctrlKey && ['w', 't', 'n', 'Tab'].includes(e.key)) {
+              e.preventDefault();
+              return false;
+            }
+            // Block Alt+Tab, Alt+F4
+            if (e.altKey && (e.key === 'Tab' || e.key === 'F4')) {
+              e.preventDefault();
+              return false;
+            }
+          });
+
+          // Anti-cheat: prevent navigation
+          window.onbeforeunload = function () {
+            return "Your exam is still in progress. Leaving will NOT save your answers.";
+          };
+
+          // Block browser back button
+          history.pushState(null, null, location.href);
+          window.addEventListener('popstate', () => {
+            history.pushState(null, null, location.href);
+          });
+        }
+
+        function updateViolationDisplay() {
+          const el = document.getElementById('violationDisplay');
+          if (violationCount === 0) {
+            el.className = 'violation-counter safe';
+            el.innerHTML = '<span class="material-icons" style="font-size:14px">verified_user</span> No Violations';
+          } else {
+            el.className = 'violation-counter';
+            el.innerHTML = `<span class="material-icons" style="font-size:14px">warning</span> ${violationCount}/${MAX_VIOLATIONS} Violations`;
+          }
+        }
+
+        function updateProgress() {
+          const answered = Object.keys(answers).length;
+          const total = questions.length;
+          const pct = total > 0 ? (answered / total * 100) : 0;
+          document.getElementById('progressBar').style.width = pct + '%';
+        }
+
+        function startTimer() {
+          const timerEl = document.getElementById('timer');
+          const interval = setInterval(() => {
+            timeLeft--;
+            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const s = (timeLeft % 60).toString().padStart(2, '0');
+            timerEl.textContent = `${m}:${s}`;
+            // Warning when less than 2 minutes
+            if (timeLeft <= 120) {
+              timerEl.classList.add('warning');
+            }
+            if (timeLeft <= 0) {
+              clearInterval(interval);
+              submitExam();
+            }
+          }, 1000);
+        }
+
+        function renderGrid() {
+          const grid = document.getElementById('qGrid');
+          grid.innerHTML = '';
+          questions.forEach((q, idx) => {
+            const btn = document.createElement('div');
+            btn.className = `q-btn ${idx === currentIdx ? 'active' : ''} ${answers[q.qid] ? 'answered' : ''} ${flags[q.qid] ? 'flagged' : ''}`;
+            btn.textContent = idx + 1;
+            btn.onclick = () => showQ(idx);
+            grid.appendChild(btn);
+          });
+        }
+
+        function showQ(idx) {
+          currentIdx = idx;
+          const q = questions[idx];
+          const container = document.getElementById('qContainer');
+          const selected = answers[q.qid];
+
+          let html = `
+          <button type="button" class="btn-flag ${flags[q.qid] ? 'active' : ''}" onclick="toggleFlag('${q.qid}')">
+            <span class="material-icons">${flags[q.qid] ? 'flag' : 'outlined_flag'}</span>
+          </button>
+          <h3 style="color:var(--text-muted);font-size:14px;margin-bottom:10px">Question ${idx + 1} of ${questions.length}</h3>
+          <div class="q-text">${q.qns}</div>
+        `;
+
+          if (q.question_type === 'mcq' || !q.question_type) {
+            q.options.forEach(opt => {
+              html += `
+                <label class="opt-label ${selected === opt.optionid ? 'selected' : ''}">
+                  <input type="radio" name="temp_${q.qid}" value="${opt.optionid}" 
+                    ${selected === opt.optionid ? 'checked' : ''}
+                    onchange="selectAns('${q.qid}', '${opt.optionid}')">
+                  ${opt.option}
+                </label>
+              `;
+            });
+          } else if (q.question_type === 'short' || q.question_type === 'code') {
+            html += `
+                <textarea class="form-control" 
+                    onchange="selectAns('${q.qid}', this.value, true)" 
+                    oninput="selectAns('${q.qid}', this.value, true)"
+                    style="width:100%;height:150px;background:var(--bg-input);color:var(--text-primary);border:1px solid var(--border-input);border-radius:8px;padding:15px;font-family:monospace"
+                    placeholder="Type your answer here...">${selected || ''}</textarea>
+            `;
+          } else if (q.question_type === 'match') {
+            if (!q.shuffledRight) {
+              q.shuffledRight = q.options.map(o => o.optionid).sort(() => Math.random() - 0.5);
+            }
+            html += '<div style="display:flex;flex-direction:column;gap:10px">';
+            q.options.forEach(opt => {
+              const currentVal = selected ? selected[opt.option] : '';
+              html += `
+                <div style="display:flex;align-items:center;padding:10px;background:var(--bg-input);border-radius:8px">
+                    <span style="flex:1;font-weight:600;color:var(--text-primary)">${opt.option}</span>
+                    <span style="margin:0 15px;color:var(--text-dimmed)">=</span>
+                    <select style="flex:1;padding:8px;border-radius:4px;background:var(--bg-primary);color:var(--text-primary);border:1px solid var(--border-input)"
+                        onchange="selectMatch('${q.qid}', '${opt.option}', this.value)">
+                        <option value="">Select...</option>
+                        ${q.shuffledRight.map(r => `<option value="${r}" ${currentVal === r ? 'selected' : ''}>${r}</option>`).join('')}
+                    </select>
+                </div>`;
+            });
+            html += '</div>';
+          }
+
+          container.innerHTML = html;
+          renderGrid();
+
+          document.getElementById('btnPrev').style.visibility = idx === 0 ? 'hidden' : 'visible';
+          document.getElementById('btnNext').style.visibility = idx === questions.length - 1 ? 'hidden' : 'visible';
+        }
+
+        function selectAns(qid, val, isText = false) {
+          answers[qid] = val;
+          renderGrid();
+          updateProgress();
+          if (!isText) {
+            const labels = document.querySelectorAll('.opt-label');
+            labels.forEach(l => l.classList.remove('selected'));
+            event.target.closest('label').classList.add('selected');
+          }
+        }
+
+        function selectMatch(qid, left, right) {
+          if (!answers[qid] || typeof answers[qid] !== 'object') answers[qid] = {};
+          answers[qid][left] = right;
+          renderGrid();
+          updateProgress();
+        }
+
+        function toggleFlag(qid) {
+          flags[qid] = !flags[qid];
+          renderGrid();
+          showQ(currentIdx);
+        }
+
+        function prevQ() { if (currentIdx > 0) showQ(currentIdx - 1); }
+        function nextQ() { if (currentIdx < questions.length - 1) showQ(currentIdx + 1); }
+
+        function resumeExam() {
+          document.getElementById('lockdown-warning').style.display = 'none';
+          document.documentElement.requestFullscreen().catch(e => console.log(e));
+        }
+
+        function confirmSubmit() {
+          const answered = Object.keys(answers).length;
+          const total = questions.length;
+          const msg = answered < total
+            ? `You have answered ${answered} of ${total} questions. ${total - answered} questions are unanswered.\n\nAre you sure you want to submit?`
+            : 'Are you sure you want to submit the exam?';
+          if (confirm(msg)) {
+            submitExam();
+          }
+        }
+
+        function submitExam() {
+          window.onbeforeunload = null;
+          if (document.fullscreenElement) {
+            document.exitFullscreen().catch(e => { });
+          }
+          const form = document.getElementById('examForm');
+
+          for (const [qid, val] of Object.entries(answers)) {
+            if (typeof val === 'object') {
+              for (const [left, right] of Object.entries(val)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = `ans_${qid}[${left}]`;
+                input.value = right;
+                form.appendChild(input);
+              }
+            } else {
+              const input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = `ans_${qid}`;
+              input.value = val;
+              form.appendChild(input);
+            }
+          }
+
+          form.submit();
+        }
+
+        window.addEventListener('load', init);
+      </script>
+    <?php } ?>
 
     <!-- RESULT -->
     <?php if (@$_GET['q'] == 'result' && @$_GET['eid']) {
@@ -588,7 +1561,10 @@ $email = $_SESSION['email'];
         echo '<div class="result-stat"><div class="label">Total Questions</div><div class="value total">' . $row['level'] . '</div></div>';
         echo '<div class="result-stat"><div class="label">Correct</div><div class="value correct">' . $row['sahi'] . '</div></div>';
         echo '<div class="result-stat"><div class="label">Wrong</div><div class="value wrong">' . $row['wrong'] . '</div></div>';
-        echo '<div class="result-stat"><div class="label">Score</div><div class="value score">' . $row['score'] . '</div></div>';
+        $q_quiz = mysqli_query($con, "SELECT sahi, total FROM quiz WHERE eid='$eid'");
+        $row_quiz = mysqli_fetch_array($q_quiz);
+        $max_score = $row_quiz['sahi'] * $row_quiz['total'];
+        echo '<div class="result-stat"><div class="label">Score</div><div class="value score">' . $row['score'] . ' / ' . $max_score . '</div></div>';
       }
       $q = mysqli_query($con, "SELECT * FROM rank WHERE email='$email'") or die('Error');
       while ($row = mysqli_fetch_array($q)) {
@@ -604,37 +1580,20 @@ $email = $_SESSION['email'];
       $c = 0;
       while ($row = mysqli_fetch_array($q)) {
         $eid = $row['eid'];
-        $q23 = mysqli_query($con, "SELECT title FROM quiz WHERE eid='$eid'") or die('Error');
+        $q23 = mysqli_query($con, "SELECT title, sahi, total FROM quiz WHERE eid='$eid'") or die('Error');
         $title = '';
+        $max_score = 0;
         while ($r2 = mysqli_fetch_array($q23)) {
           $title = $r2['title'];
+          $max_score = $r2['sahi'] * $r2['total'];
         }
         $c++;
-        echo '<tr><td>' . $c . '</td><td>' . $title . '</td><td>' . $row['level'] . '</td><td style="color:#38ef7d">' . $row['sahi'] . '</td><td style="color:#ff416c">' . $row['wrong'] . '</td><td style="color:#4facfe;font-weight:700">' . $row['score'] . '</td></tr>';
+        echo '<tr><td>' . $c . '</td><td>' . $title . '</td><td>' . $row['level'] . '</td><td style="color:#38ef7d">' . $row['sahi'] . '</td><td style="color:#ff416c">' . $row['wrong'] . '</td><td style="color:#4facfe;font-weight:700">' . $row['score'] . ' / ' . $max_score . '</td></tr>';
       }
       echo '</tbody></table></div>';
     } ?>
 
-    <!-- RANKING -->
-    <?php if (@$_GET['q'] == 3) {
-      $q = mysqli_query($con, "SELECT * FROM rank ORDER BY score DESC") or die('Error');
-      echo '<div class="page-header"><h1>Student Rankings</h1><p>Overall scores leaderboard</p></div><div class="card"><table class="data-table"><thead><tr><th>Rank</th><th>Name</th><th>Gender</th><th>College</th><th>Score</th></tr></thead><tbody>';
-      $c = 0;
-      while ($row = mysqli_fetch_array($q)) {
-        $e = $row['email'];
-        $s = $row['score'];
-        $q12 = mysqli_query($con, "SELECT * FROM user WHERE email='$e'") or die('Error');
-        while ($r2 = mysqli_fetch_array($q12)) {
-          $uname = $r2['name'];
-          $gender = $r2['gender'];
-          $college = $r2['college'];
-        }
-        $c++;
-        $rankStyle = $c <= 3 ? 'color:#ffd700;font-weight:700' : 'color:#4facfe;font-weight:600';
-        echo '<tr><td style="' . $rankStyle . '">' . $c . '</td><td>' . $uname . '</td><td>' . $gender . '</td><td>' . $college . '</td><td style="font-weight:700">' . $s . '</td></tr>';
-      }
-      echo '</tbody></table></div>';
-    } ?>
+
 
   </main>
   <script>

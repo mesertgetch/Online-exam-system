@@ -1,0 +1,173 @@
+/* ===========================================
+   ECUSTA Theme System — Dark / Light Mode
+   =========================================== */
+
+:root {
+    /* Dark theme (default) */
+    --bg-primary: #0e1a2b;
+    --bg-secondary: #132238;
+    --bg-tertiary: #0d1929;
+    --bg-card: rgba(255, 255, 255, 0.04);
+    --bg-card-hover: rgba(255, 255, 255, 0.06);
+    --bg-input: rgba(255, 255, 255, 0.06);
+    --bg-input-focus: rgba(255, 255, 255, 0.1);
+
+    --border-primary: rgba(255, 255, 255, 0.06);
+    --border-input: rgba(255, 255, 255, 0.1);
+    --border-input-focus: rgba(79, 172, 254, 0.5);
+
+    --text-primary: #ffffff;
+    --text-secondary: #e0e6ed;
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --text-dimmed: rgba(255, 255, 255, 0.35);
+    --text-faint: rgba(255, 255, 255, 0.25);
+    --text-input-placeholder: rgba(255, 255, 255, 0.3);
+
+    --sidebar-bg: linear-gradient(180deg, #132238 0%, #0d1929 100%);
+    --sidebar-text: rgba(255, 255, 255, 0.5);
+    --sidebar-text-hover: rgba(255, 255, 255, 0.85);
+    --sidebar-active-bg: rgba(79, 172, 254, 0.12);
+    --sidebar-active-text: #4facfe;
+
+    --accent: #4facfe;
+    --accent-secondary: #00f2fe;
+    --accent-gradient: linear-gradient(135deg, #4facfe, #00f2fe);
+
+    --success: #38ef7d;
+    --danger: #ff416c;
+    --warning: #ffd700;
+    --purple: #a885ff;
+
+    --success-bg: rgba(56, 239, 125, 0.12);
+    --danger-bg: rgba(255, 65, 108, 0.12);
+
+    --table-header-color: rgba(255, 255, 255, 0.35);
+    --table-row-hover: rgba(255, 255, 255, 0.03);
+    --table-border: rgba(255, 255, 255, 0.04);
+
+    --select-option-bg: #132238;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+
+    /* Admin-specific override vars (set on admin pages) */
+    --admin-sidebar-bg: linear-gradient(180deg, #1a0a2e 0%, #150826 100%);
+    --admin-accent: #a885ff;
+    --admin-accent-secondary: #e572ff;
+    --admin-accent-gradient: linear-gradient(135deg, #a885ff, #e572ff);
+    --admin-sidebar-active-bg: rgba(168, 133, 255, 0.12);
+    --admin-sidebar-active-text: #a885ff;
+    --admin-accent-dark: #1a0a2e;
+
+    /* Login page backgrounds */
+    --login-bg: linear-gradient(135deg, #0a1628 0%, #1a2a4a 40%, #0e1a2b 100%);
+    --admin-login-bg: linear-gradient(135deg, #1a0a2e 0%, #2d1b69 40%, #44318d 70%, #1a0a2e 100%);
+}
+
+[data-theme="light"] {
+    --bg-primary: #f0f2f5;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f8f9fa;
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --bg-card-hover: rgba(0, 0, 0, 0.02);
+    --bg-input: rgba(0, 0, 0, 0.04);
+    --bg-input-focus: rgba(0, 0, 0, 0.06);
+
+    --border-primary: rgba(0, 0, 0, 0.08);
+    --border-input: rgba(0, 0, 0, 0.12);
+    --border-input-focus: rgba(79, 172, 254, 0.6);
+
+    --text-primary: #1a1a2e;
+    --text-secondary: #2d3748;
+    --text-muted: rgba(0, 0, 0, 0.5);
+    --text-dimmed: rgba(0, 0, 0, 0.4);
+    --text-faint: rgba(0, 0, 0, 0.3);
+    --text-input-placeholder: rgba(0, 0, 0, 0.35);
+
+    --sidebar-bg: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    --sidebar-text: rgba(0, 0, 0, 0.5);
+    --sidebar-text-hover: rgba(0, 0, 0, 0.8);
+    --sidebar-active-bg: rgba(79, 172, 254, 0.1);
+    --sidebar-active-text: #2980b9;
+
+    --accent: #2980b9;
+    --accent-secondary: #00b4d8;
+    --accent-gradient: linear-gradient(135deg, #2980b9, #00b4d8);
+
+    --success: #27ae60;
+    --danger: #e74c3c;
+    --warning: #f39c12;
+    --purple: #8e44ad;
+
+    --success-bg: rgba(39, 174, 96, 0.1);
+    --danger-bg: rgba(231, 76, 60, 0.1);
+
+    --table-header-color: rgba(0, 0, 0, 0.45);
+    --table-row-hover: rgba(0, 0, 0, 0.02);
+    --table-border: rgba(0, 0, 0, 0.06);
+
+    --select-option-bg: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+
+    --admin-sidebar-bg: linear-gradient(180deg, #ffffff 0%, #f5f0ff 100%);
+    --admin-accent: #7c3aed;
+    --admin-accent-secondary: #a855f7;
+    --admin-accent-gradient: linear-gradient(135deg, #7c3aed, #a855f7);
+    --admin-sidebar-active-bg: rgba(124, 58, 237, 0.1);
+    --admin-sidebar-active-text: #7c3aed;
+    --admin-accent-dark: #f5f0ff;
+
+    --login-bg: linear-gradient(135deg, #e8f4f8 0%, #dfe6e9 40%, #f0f2f5 100%);
+    --admin-login-bg: linear-gradient(135deg, #f5f0ff 0%, #ede4ff 40%, #e8dff5 70%, #f5f0ff 100%);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border-primary);
+    background: var(--bg-card);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0;
+}
+
+.theme-toggle:hover {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+    transform: rotate(30deg);
+}
+
+.theme-toggle .material-icons {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+/* Floating toggle for login pages */
+.theme-toggle-float {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+/* Smooth transitions on theme change */
+body,
+.sidebar,
+.main,
+.card,
+.data-table,
+.data-table td,
+.data-table th,
+.nav-item,
+.page-header h1,
+.page-header p,
+input,
+select,
+textarea,
+.btn-signout {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
