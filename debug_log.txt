@@ -71,3 +71,18 @@ Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 6990c376e2446
 Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 6990c376e2446
 Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 6990c376e2446
 Update.php called. Q: submitexam Key:  POST_EID:  GET_EID: 6990c376e2446
+Update.php called. Q: editqns Key: prasanth123 POST_EID: 6990c376e2446 GET_EID: 
+Update.php called. Q: delete_question Key: prasanth123 POST_EID:  GET_EID: 6990c376e2446
+Update.php called. Q: editquiz Key: prasanth123 POST_EID:  GET_EID: 6990c376e2446
+Update.php called. Q: reset_all_exam Key: prasanth123 POST_EID: 6990c376e2446 GET_EID: 
+Update.php called. Q: checkcode Key:  POST_EID:  GET_EID: 6990c376e2446
+Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 6990c376e2446
+Update.php called. Q: submitexam Key:  POST_EID:  GET_EID: 6990c376e2446
+Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 698f0f702fa5e
+Update.php called. Q: extendtime Key: prasanth123 POST_EID: 698f0f702fa5e GET_EID: 
+Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 698f0f702fa5e
+Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 698f0f702fa5e
+Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 698f0f702fa5e
+Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 698f0f702fa5e
+Update.php called. Q: check_time Key:  POST_EID:  GET_EID: 698f0f702fa5e
+Update.php called. Q: submitexam Key:  POST_EID:  GET_EID: 698f0f702fa5e

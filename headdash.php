@@ -528,7 +528,7 @@ $name = $_SESSION['name'];
       </a>
       <a href="headdash.php?q=2" class="nav-item <?php if (@$_GET['q'] == 2)
         echo 'active'; ?>">
-        <span class="material-icons">leaderboard</span> Rankings
+        <span class="material-icons">assessment</span> Scores
       </a>
 
       <div class="sidebar-label">Administration</div>
@@ -641,10 +641,11 @@ $name = $_SESSION['name'];
               <th>#</th>
               <th>Name</th>
               <th>Gender</th>
-              <th>College</th>
+              <th>Department</th>
+              <th>Year</th>
               <th>Email</th>
               <th>Mobile</th>
-              <th></th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -652,8 +653,11 @@ $name = $_SESSION['name'];
             $result = mysqli_query($con, "SELECT * FROM user") or die('Error');
             $c = 1;
             while ($row = mysqli_fetch_array($result)) {
-              echo '<tr><td>' . $c++ . '</td><td>' . $row['name'] . '</td><td>' . $row['gender'] . '</td><td>' . $row['college'] . '</td><td>' . $row['email'] . '</td><td>' . $row['mob'] . '</td>';
-              echo '<td><a href="update.php?demail=' . $row['email'] . '" class="btn-action btn-danger" title="Delete user"><span class="material-icons" style="font-size:16px">delete</span></a></td></tr>';
+              echo '<tr><td>' . $c++ . '</td><td>' . htmlspecialchars($row['name']) . '</td><td>' . $row['gender'] . '</td><td>' . htmlspecialchars($row['college']) . '</td><td>' . htmlspecialchars(@$row['year']) . '</td><td>' . htmlspecialchars($row['email']) . '</td><td>' . $row['mob'] . '</td>';
+              echo '<td style="display:flex;gap:6px">';
+              echo '<a href="headdash.php?q=edit_user&email=' . urlencode($row['email']) . '" class="btn-action btn-primary" title="Edit user"><span class="material-icons" style="font-size:16px">edit</span></a>';
+              echo '<a href="update.php?demail=' . urlencode($row['email']) . '" class="btn-action btn-danger" title="Delete user" onclick="return confirm(\'Delete this student and all their data?\')" ><span class="material-icons" style="font-size:16px">delete</span></a>';
+              echo '</td></tr>';
             }
             ?>
           </tbody>
@@ -661,49 +665,334 @@ $name = $_SESSION['name'];
       </div>
     <?php } ?>
 
-    <!-- RANKING -->
-    <?php if (@$_GET['q'] == 2) { ?>
+    <!-- EDIT USER -->
+    <?php if (@$_GET['q'] == 'edit_user') {
+      $uemail = @$_GET['email'];
+      $uq = mysqli_query($con, "SELECT * FROM user WHERE email='$uemail'");
+      $urow = mysqli_fetch_array($uq);
+      if ($urow) {
+    ?>
       <div class="page-header">
-        <h1>Student Rankings</h1>
-        <p>Overall leaderboard</p>
+        <h1>Edit Student</h1>
+        <p>Update information for <?php echo htmlspecialchars($urow['name']); ?></p>
       </div>
-      <div class="card">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Name</th>
-              <th>Gender</th>
-              <th>College</th>
-              <th>Score</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php
-            $q = mysqli_query($con, "SELECT * FROM rank ORDER BY score DESC") or die('Error');
-            $c = 0;
-            while ($row = mysqli_fetch_array($q)) {
-              $e = $row['email'];
-              $s = $row['score'];
-              $q12 = mysqli_query($con, "SELECT * FROM user WHERE email='$e'") or die('Error');
-              while ($r2 = mysqli_fetch_array($q12)) {
-                $uname = $r2['name'];
-                $gender = $r2['gender'];
-                $college = $r2['college'];
-              }
-              $c++;
-              $q_total = mysqli_query($con, "SELECT SUM(q.sahi * q.total) as total_max FROM history h JOIN quiz q ON h.eid = q.eid WHERE h.email='$e'");
-              $row_total = mysqli_fetch_array($q_total);
-              $total_max = $row_total['total_max'];
-              if (!$total_max)
-                $total_max = 0;
-              $rankStyle = $c <= 3 ? 'color:#ffd700;font-weight:700' : 'color:#a885ff;font-weight:600';
-              echo '<tr><td style="' . $rankStyle . '">' . $c . '</td><td>' . $uname . '</td><td>' . $gender . '</td><td>' . $college . '</td><td style="font-weight:700">' . $s . ' / ' . $total_max . '</td></tr>';
+      <div class="card" style="max-width:550px">
+        <form action="update.php?q=update_user" method="POST">
+          <input type="hidden" name="email" value="<?php echo htmlspecialchars($urow['email']); ?>">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name</label>
+              <input name="name" type="text" value="<?php echo htmlspecialchars($urow['name']); ?>" required>
+            </div>
+            <div class="form-group">
+              <label>Gender</label>
+              <select name="gender" style="appearance:auto" required>
+                <option value="M" <?php if ($urow['gender'] == 'M') echo 'selected'; ?>>Male</option>
+                <option value="F" <?php if ($urow['gender'] == 'F') echo 'selected'; ?>>Female</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Department</label>
+              <select id="edit-user-dept" name="college" style="appearance:auto" required onchange="updateEditUserYears()">
+                <option value="" disabled>Select Department</option>
+                <?php
+                $dq = mysqli_query($con, "SELECT * FROM departments ORDER BY dept_name ASC");
+                while ($dr = mysqli_fetch_array($dq)) {
+                  $sel = ($dr['dept_name'] == $urow['college']) ? 'selected' : '';
+                  echo '<option value="' . htmlspecialchars($dr['dept_name']) . '" data-years="' . htmlspecialchars($dr['year_labels']) . '" ' . $sel . '>' . htmlspecialchars($dr['dept_name']) . '</option>';
+                }
+                ?>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Year</label>
+              <select id="edit-user-year" name="year" style="appearance:auto">
+                <option value="">Select Year</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email (Read Only)</label>
+            <input type="email" value="<?php echo htmlspecialchars($urow['email']); ?>" disabled
+              style="opacity:0.6;cursor:not-allowed">
+          </div>
+          <div class="form-group">
+            <label>Mobile Number</label>
+            <input name="mob" type="number" value="<?php echo $urow['mob']; ?>" required>
+          </div>
+          <div class="form-group">
+            <label>New Password <span style="color:var(--text-dimmed);font-weight:400">(leave blank to keep current)</span></label>
+            <input name="new_password" type="password" placeholder="Enter new password" minlength="5">
+          </div>
+          <div style="display:flex;gap:12px;margin-top:8px">
+            <button type="submit" class="btn-submit" style="flex:1">Save Changes</button>
+            <a href="headdash.php?q=1" class="btn-action btn-danger"
+              style="display:flex;align-items:center;justify-content:center;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:600">Cancel</a>
+          </div>
+        </form>
+      </div>
+      <script>
+        (function() {
+          const currentYear = <?php echo json_encode(@$urow['year'] ?: ''); ?>;
+          function updateEditUserYears() {
+            const select = document.getElementById('edit-user-dept');
+            const opt = select.selectedOptions[0];
+            const years = opt ? opt.getAttribute('data-years') : '';
+            const yearSelect = document.getElementById('edit-user-year');
+            yearSelect.innerHTML = '<option value="">Select Year</option>';
+            if (years) {
+              years.split(',').forEach(y => {
+                const o = document.createElement('option');
+                o.value = y.trim();
+                o.textContent = y.trim();
+                if (y.trim() === currentYear) o.selected = true;
+                yearSelect.appendChild(o);
+              });
             }
-            ?>
-          </tbody>
-        </table>
+          }
+          window.updateEditUserYears = updateEditUserYears;
+          updateEditUserYears();
+        })();
+      </script>
+    <?php } else { ?>
+      <div class="card" style="text-align:center;padding:32px">
+        <p style="color:var(--text-dimmed)">User not found.</p>
+        <a href="headdash.php?q=1" style="color:#a885ff">Back to Users</a>
       </div>
+    <?php } } ?>
+
+    <!-- SCORES -->
+    <?php if (@$_GET['q'] == 2) {
+      $sel_eid = @$_GET['eid'];
+      $sel_dept = @$_GET['dept'];
+      ?>
+      <div class="page-header">
+        <h1>Exam Scores</h1>
+        <p>View student scores per exam with department filtering</p>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="card" style="padding:20px">
+        <form method="GET" action="headdash.php" style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap">
+          <input type="hidden" name="q" value="2">
+          <div class="form-group" style="flex:1;min-width:220px;margin-bottom:0">
+            <label>Select Exam</label>
+            <select name="eid" onchange="this.form.submit()"
+              style="appearance:auto;width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--border-input);background:var(--bg-input);color:var(--text-primary);font-size:14px;cursor:pointer">
+              <option value="">— Choose an Exam —</option>
+              <?php
+              $eq = mysqli_query($con, "SELECT eid, title FROM quiz ORDER BY date DESC");
+              while ($er = mysqli_fetch_array($eq)) {
+                $selected = ($er['eid'] == $sel_eid) ? 'selected' : '';
+                echo '<option value="' . $er['eid'] . '" ' . $selected . '>' . htmlspecialchars($er['title']) . '</option>';
+              }
+              ?>
+            </select>
+          </div>
+          <div class="form-group" style="flex:1;min-width:220px;margin-bottom:0">
+            <label>Department</label>
+            <select name="dept" onchange="this.form.submit()"
+              style="appearance:auto;width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--border-input);background:var(--bg-input);color:var(--text-primary);font-size:14px;cursor:pointer">
+              <option value="">All Departments</option>
+              <?php
+              $dq = mysqli_query($con, "SELECT * FROM departments ORDER BY dept_name ASC");
+              while ($dr = mysqli_fetch_array($dq)) {
+                $selected = ($dr['dept_name'] == $sel_dept) ? 'selected' : '';
+                echo '<option value="' . htmlspecialchars($dr['dept_name']) . '" ' . $selected . '>' . htmlspecialchars($dr['dept_name']) . '</option>';
+              }
+              ?>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <?php if ($sel_eid) {
+        // Get exam info
+        $quiz_q = mysqli_query($con, "SELECT * FROM quiz WHERE eid='$sel_eid'");
+        $quiz_row = mysqli_fetch_array($quiz_q);
+        $exam_title = $quiz_row['title'];
+        $total_marks = $quiz_row['sahi'] * $quiz_row['total'];
+        $total_questions = $quiz_row['total'];
+        $marks_per_correct = $quiz_row['sahi'];
+        $marks_per_wrong = $quiz_row['wrong'];
+
+        // Build query with optional department filter
+        $sql = "SELECT h.email, h.score, h.sahi as correct, h.wrong, h.date, u.name, u.gender, u.college"
+          . " FROM history h JOIN user u ON h.email = u.email"
+          . " WHERE h.eid = '$sel_eid'";
+        if ($sel_dept) {
+          $sel_dept_esc = mysqli_real_escape_string($con, $sel_dept);
+          $sql .= " AND u.college = '$sel_dept_esc'";
+        }
+        $sql .= " ORDER BY h.score DESC";
+        $scores_q = mysqli_query($con, $sql);
+        $num_students = mysqli_num_rows($scores_q);
+        ?>
+
+        <!-- Exam Summary -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px">
+          <div class="card" style="text-align:center;padding:16px;margin-bottom:0">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dimmed);margin-bottom:4px">
+              Students</div>
+            <div style="font-size:24px;font-weight:700;color:var(--text-primary)"><?php echo $num_students; ?></div>
+          </div>
+          <div class="card" style="text-align:center;padding:16px;margin-bottom:0">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dimmed);margin-bottom:4px">
+              Total Marks</div>
+            <div style="font-size:24px;font-weight:700;color:var(--text-primary)"><?php echo $total_marks; ?></div>
+          </div>
+          <div class="card" style="text-align:center;padding:16px;margin-bottom:0">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dimmed);margin-bottom:4px">
+              Questions</div>
+            <div style="font-size:24px;font-weight:700;color:var(--text-primary)"><?php echo $total_questions; ?></div>
+          </div>
+          <div class="card" style="text-align:center;padding:16px;margin-bottom:0">
+            <div
+              style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dimmed);margin-bottom:4px">
+              +/− per Q</div>
+            <div style="font-size:24px;font-weight:700;color:var(--text-primary)">+<?php echo $marks_per_correct; ?> /
+              −<?php echo $marks_per_wrong; ?></div>
+          </div>
+        </div>
+
+        <!-- Scores Table -->
+        <div class="card">
+          <h3 style="margin-bottom:16px"><?php echo htmlspecialchars($exam_title); ?> —
+            Scores<?php echo $sel_dept ? ' (' . htmlspecialchars($sel_dept) . ')' : ''; ?></h3>
+          <table class="data-table" id="scores-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Score</th>
+                <th>Correct</th>
+                <th>Wrong</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $c = 0;
+              while ($sr = mysqli_fetch_array($scores_q)) {
+                $c++;
+                $pct = $total_marks > 0 ? round(($sr['score'] / $total_marks) * 100) : 0;
+                $pct_color = $pct >= 70 ? '#2ecc71' : ($pct >= 50 ? '#f39c12' : '#e74c3c');
+                $date_fmt = date('d M Y, H:i', strtotime($sr['date']));
+                echo '<tr>';
+                echo '<td>' . $c . '</td>';
+                echo '<td>' . htmlspecialchars($sr['name']) . '</td>';
+                echo '<td style="color:var(--text-dimmed);font-size:13px">' . htmlspecialchars($sr['email']) . '</td>';
+                echo '<td>' . htmlspecialchars($sr['college']) . '</td>';
+                echo '<td><span style="font-weight:700">' . $sr['score'] . '</span><span style="color:var(--text-dimmed)"> / ' . $total_marks . '</span> <span style="color:' . $pct_color . ';font-size:12px;font-weight:600">(' . $pct . '%)</span></td>';
+                echo '<td style="color:#2ecc71;font-weight:600">' . $sr['correct'] . '</td>';
+                echo '<td style="color:#e74c3c;font-weight:600">' . $sr['wrong'] . '</td>';
+                echo '<td style="font-size:13px;color:var(--text-dimmed)">' . $date_fmt . '</td>';
+                echo '</tr>';
+              }
+              if ($c == 0) {
+                echo '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text-dimmed)">No students have taken this exam yet.</td></tr>';
+              }
+              ?>
+            </tbody>
+          </table>
+        </div>
+
+        <?php if ($c > 0) { ?>
+          <!-- Export Bar -->
+          <div class="card" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+            <div style="font-size:14px;color:var(--text-dimmed)">
+              <span class="material-icons" style="font-size:18px;vertical-align:middle">download</span>
+              Export <?php echo $c; ?> record<?php echo $c > 1 ? 's' : ''; ?>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button onclick="exportPDF()" class="btn-action btn-primary"
+                style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border:none;cursor:pointer;font-family:inherit">
+                <span class="material-icons" style="font-size:18px">picture_as_pdf</span> Export PDF
+              </button>
+              <button onclick="exportExcel()" class="btn-action"
+                style="display:inline-flex;align-items:center;gap:6px;padding:10px 20px;background:#217346;color:#fff;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-weight:600">
+                <span class="material-icons" style="font-size:18px">table_chart</span> Export Excel
+              </button>
+            </div>
+          </div>
+
+          <!-- Export Libraries -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+          <script>
+            function getTableData() {
+              const table = document.getElementById('scores-table');
+              const headers = [];
+              const rows = [];
+              table.querySelectorAll('thead th').forEach(th => headers.push(th.textContent.trim()));
+              table.querySelectorAll('tbody tr').forEach(tr => {
+                const row = [];
+                tr.querySelectorAll('td').forEach(td => row.push(td.textContent.trim()));
+                if (row.length === headers.length) rows.push(row);
+              });
+              return { headers, rows };
+            }
+
+            function exportPDF() {
+              const { jsPDF } = window.jspdf;
+              const doc = new jsPDF('l', 'mm', 'a4');
+              const examTitle = <?php echo json_encode($exam_title); ?>;
+              const dept = <?php echo json_encode($sel_dept ?: 'All Departments'); ?>;
+              const date = new Date().toLocaleDateString();
+
+              doc.setFontSize(18);
+              doc.text('ECUSTA — Exam Scores Report', 14, 18);
+              doc.setFontSize(11);
+              doc.setTextColor(100);
+              doc.text('Exam: ' + examTitle + '  |  Department: ' + dept + '  |  Generated: ' + date, 14, 26);
+
+              const { headers, rows } = getTableData();
+              doc.autoTable({
+                head: [headers],
+                body: rows,
+                startY: 32,
+                theme: 'grid',
+                styles: { fontSize: 9, cellPadding: 3 },
+                headStyles: { fillColor: [127, 0, 255], textColor: 255, fontStyle: 'bold' },
+                alternateRowStyles: { fillColor: [245, 245, 255] }
+              });
+
+              doc.save(examTitle.replace(/[^a-zA-Z0-9]/g, '_') + '_Scores.pdf');
+            }
+
+            function exportExcel() {
+              const examTitle = <?php echo json_encode($exam_title); ?>;
+              const { headers, rows } = getTableData();
+              const data = [headers, ...rows];
+              const ws = XLSX.utils.aoa_to_sheet(data);
+
+              // Style column widths
+              ws['!cols'] = headers.map((h, i) => ({ wch: Math.max(h.length, ...rows.map(r => (r[i] || '').length)) + 4 }));
+
+              const wb = XLSX.utils.book_new();
+              XLSX.utils.book_append_sheet(wb, ws, 'Scores');
+              XLSX.writeFile(wb, examTitle.replace(/[^a-zA-Z0-9]/g, '_') + '_Scores.xlsx');
+            }
+          </script>
+        <?php } ?>
+
+      <?php } else { ?>
+        <!-- No exam selected -->
+        <div class="card" style="text-align:center;padding:48px">
+          <span class="material-icons" style="font-size:56px;color:var(--text-faint);margin-bottom:12px">quiz</span>
+          <h3 style="color:var(--text-primary);margin-bottom:8px">Select an Exam</h3>
+          <p style="color:var(--text-dimmed);font-size:14px">Choose an exam from the dropdown above to view student scores.
+          </p>
+        </div>
+      <?php } ?>
     <?php } ?>
 
     <!-- FEEDBACK -->
@@ -1242,7 +1531,10 @@ $name = $_SESSION['name'];
               if (empty($type))
                 $type = 'mcq';
               echo '<tr><td>' . $sn . '</td><td>' . htmlspecialchars($qns) . '</td><td>' . strtoupper($type) . '</td>
-              <td><a href="headdash.php?q=edit_question&qid=' . $qid . '" class="btn-action btn-primary"><span class="material-icons" style="font-size:16px">edit</span> Edit</a></td></tr>';
+              <td style="display:flex;gap:6px">
+                <a href="headdash.php?q=edit_question&qid=' . $qid . '" class="btn-action btn-primary"><span class="material-icons" style="font-size:16px">edit</span> Edit</a>
+                <a href="update.php?q=delete_question&qid=' . $qid . '&eid=' . $eid . '&from=admin" class="btn-action btn-danger" onclick="return confirm(\'Delete this question? This cannot be undone.\')"><span class="material-icons" style="font-size:16px">delete</span> Remove</a>
+              </td></tr>';
             }
             ?>
           </tbody>

@@ -519,6 +519,61 @@ if (@$_GET['q'] == 'toggle_exam_status') {
   }
 }
 
+// DELETE QUESTION (Admin)
+if (@$_GET['q'] == 'delete_question') {
+  if (isset($_SESSION['key']) && ($_SESSION['key'] == 'sunny7785068889' || $_SESSION['key'] == 'prasanth123')) {
+    $qid = @$_GET['qid'];
+    $eid = @$_GET['eid'];
+    // Delete options, answer, then question
+    mysqli_query($con, "DELETE FROM options WHERE qid='$qid'");
+    mysqli_query($con, "DELETE FROM answer WHERE qid='$qid'");
+    mysqli_query($con, "DELETE FROM questions WHERE qid='$qid'");
+    // Update quiz total count
+    $count_q = mysqli_query($con, "SELECT COUNT(*) as cnt FROM questions WHERE eid='$eid'");
+    $count_row = mysqli_fetch_array($count_q);
+    $new_total = $count_row['cnt'];
+    mysqli_query($con, "UPDATE quiz SET total='$new_total' WHERE eid='$eid'");
+    if (@$_GET['from'] == 'admin') {
+      header("location:headdash.php?q=manage_quiz&eid=$eid");
+    } else {
+      header("location:dash.php?q=manage_quiz&eid=$eid");
+    }
+    exit;
+  } else {
+    header("location:admin_login.php?w=Session expired. Please login again.");
+    exit;
+  }
+}
+
+// UPDATE USER (Admin)
+if (@$_GET['q'] == 'update_user') {
+  if (isset($_SESSION['key']) && ($_SESSION['key'] == 'sunny7785068889' || $_SESSION['key'] == 'prasanth123')) {
+    $uemail = $_POST['email'];
+    $name = $_POST['name'];
+    $gender = $_POST['gender'];
+    $college = $_POST['college'];
+    $year = @$_POST['year'];
+    $mob = $_POST['mob'];
+    $new_password = @$_POST['new_password'];
+
+    $sql = "UPDATE user SET name='$name', gender='$gender', college='$college', mob='$mob'";
+    if ($year) {
+      $sql .= ", year='$year'";
+    }
+    if (!empty($new_password)) {
+      $hashed = md5($new_password);
+      $sql .= ", password='$hashed'";
+    }
+    $sql .= " WHERE email='$uemail'";
+    mysqli_query($con, $sql);
+    header("location:headdash.php?q=1");
+    exit;
+  } else {
+    header("location:admin_login.php?w=Session expired. Please login again.");
+    exit;
+  }
+}
+
 // CHECK TIME (Polling)
 if (@$_GET['q'] == 'check_time' && @$_GET['eid']) {
   $eid = @$_GET['eid'];
