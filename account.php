@@ -523,7 +523,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
           <thead>
             <tr>
               <th>#</th>
-              <th>Topic</th>
+              <th>Exam Name</th>
               <th>Questions</th>
               <th>Marks</th>
               <th>+</th>
@@ -535,7 +535,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
           </thead>
           <tbody>
             <?php
-            $result = mysqli_query($con, "SELECT * FROM quiz ORDER BY date DESC") or die('Error');
+            $result = mysqli_query($con, "SELECT * FROM quiz WHERE status='active' ORDER BY date DESC") or die('Error');
             $c = 1;
             while ($row = mysqli_fetch_array($result)) {
               $target_dept = $row['target_dept'];
@@ -570,7 +570,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
       </div>
     <?php } ?>
 
-    <!-- Quiz description -->
+    <!-- Exam Description -->
     <?php if (@$_GET['fid']) {
       $eid = @$_GET['fid'];
       $result = mysqli_query($con, "SELECT * FROM quiz WHERE eid='$eid'") or die('Error');
@@ -798,7 +798,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
         <div class="exam-details-grid">
           <div class="exam-detail-card">
             <div class="detail-icon" style="color:var(--accent)"><span class="material-icons"
-                style="font-size:28px">quiz</span></div>
+                style="font-size:28px">assignment</span></div>
             <div class="detail-label">Questions</div>
             <div class="detail-value"><?php echo $total; ?></div>
           </div>
@@ -1301,6 +1301,25 @@ while ($row_u = mysqli_fetch_array($q_user)) {
         let violationCount = 0;
         const MAX_VIOLATIONS = 3;
 
+        // Time Sync Logic
+        let currentQuizDuration = duration;
+        setInterval(() => {
+          fetch('update.php?q=check_time&eid=<?php echo $eid; ?>')
+            .then(res => res.text())
+            .then(newTime => {
+              if (newTime) {
+                const newDuration = parseInt(newTime) * 60;
+                if (newDuration > currentQuizDuration) {
+                  const diff = newDuration - currentQuizDuration;
+                  timeLeft += diff;
+                  currentQuizDuration = newDuration;
+                  showAlert("Time extended by " + (diff / 60) + " minutes!", "success");
+                }
+              }
+            })
+            .catch(err => console.error(err));
+        }, 15000);
+
         function init() {
           renderGrid();
           showQ(0);
@@ -1576,7 +1595,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
     <!-- HISTORY -->
     <?php if (@$_GET['q'] == 2) {
       $q = mysqli_query($con, "SELECT * FROM history WHERE email='$email' ORDER BY date DESC") or die('Error');
-      echo '<div class="page-header"><h1>Exam History</h1><p>Your previously completed exams</p></div><div class="card"><table class="data-table"><thead><tr><th>#</th><th>Quiz</th><th>Questions</th><th>Correct</th><th>Wrong</th><th>Score</th></tr></thead><tbody>';
+      echo '<div class="page-header"><h1>Exam History</h1><p>Your previously completed exams</p></div><div class="card"><table class="data-table"><thead><tr><th>#</th><th>Exam Name</th><th>Questions</th><th>Correct</th><th>Wrong</th><th>Score</th></tr></thead><tbody>';
       $c = 0;
       while ($row = mysqli_fetch_array($q)) {
         $eid = $row['eid'];

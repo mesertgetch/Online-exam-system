@@ -1,6 +1,8 @@
 <?php
 include_once 'dbConnection.php';
+ob_start();
 session_start();
+file_put_contents("/opt/lampp/htdocs/Online-exam-system/debug_log.txt", "Update.php called. Q: " . @$_GET['q'] . " Key: " . @$_SESSION['key'] . " POST_EID: " . @$_POST['eid'] . " GET_EID: " . @$_GET['eid'] . "\n", FILE_APPEND);
 $email = $_SESSION['email'];
 //delete feedback
 if (isset($_SESSION['key'])) {
@@ -419,31 +421,45 @@ if (isset($_SESSION['key'])) {
 }
 
 // EXTEND TIME (Admin)
-if (isset($_SESSION['key'])) {
-  if (@$_GET['q'] == 'extendtime' && $_SESSION['key'] == 'sunny7785068889') {
-    $eid = @$_GET['eid'];
-    mysqli_query($con, "UPDATE quiz SET time = time + 10 WHERE eid='$eid'");
+if (@$_GET['q'] == 'extendtime') {
+  if (isset($_SESSION['key']) && ($_SESSION['key'] == 'sunny7785068889' || $_SESSION['key'] == 'prasanth123')) {
+    $eid = $_POST['eid'];
+    $time_add = (int) $_POST['time_add'];
+    if ($time_add > 0) {
+      mysqli_query($con, "UPDATE quiz SET time = time + $time_add WHERE eid='$eid'");
+    }
     header("location:headdash.php?q=manage_quiz&eid=$eid");
+    exit;
+  } else {
+    header("location:admin_login.php?w=Session expired. Please login again.");
+    exit;
   }
 }
 
 // RESET USER EXAM (Admin)
-if (isset($_SESSION['key'])) {
-  if (@$_GET['q'] == 'reset_user_exam' && $_SESSION['key'] == 'sunny7785068889') {
+if (@$_GET['q'] == 'reset_user_exam') {
+  if (isset($_SESSION['key']) && ($_SESSION['key'] == 'sunny7785068889' || $_SESSION['key'] == 'prasanth123')) {
     $eid = $_POST['eid'];
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
+
     $q = mysqli_query($con, "SELECT score FROM history WHERE eid='$eid' AND email='$email'");
+
     while ($row = mysqli_fetch_array($q)) {
       $score = $row['score'];
       mysqli_query($con, "UPDATE rank SET score = score - $score WHERE email='$email'");
     }
     mysqli_query($con, "DELETE FROM history WHERE eid='$eid' AND email='$email'");
     header("location:headdash.php?q=manage_quiz&eid=$eid");
+    exit;
+  } else {
+    header("location:admin_login.php?w=Session expired. Please login again.");
+    exit;
   }
 }
+
 // ADD DEPARTMENT (Admin)
 if (isset($_SESSION['key'])) {
-  if (@$_GET['q'] == 'add_dept' && $_SESSION['key'] == 'sunny7785068889') {
+  if (@$_GET['q'] == 'add_dept' && ($_SESSION['key'] == 'sunny7785068889' || $_SESSION['key'] == 'prasanth123')) {
     $dept_name = $_POST['dept_name'];
     $year_labels = $_POST['year_labels'];
     $stmt = $con->prepare("INSERT INTO departments (dept_name, year_labels) VALUES (?, ?)");
@@ -454,11 +470,61 @@ if (isset($_SESSION['key'])) {
 }
 
 // DELETE DEPARTMENT (Admin)
-if (isset($_SESSION['key'])) {
-  if (@$_GET['q'] == 'delete_dept' && $_SESSION['key'] == 'sunny7785068889') {
+if (@$_GET['q'] == 'delete_dept') {
+  if (isset($_SESSION['key']) && ($_SESSION['key'] == 'sunny7785068889' || $_SESSION['key'] == 'prasanth123')) {
     $id = @$_GET['id'];
     mysqli_query($con, "DELETE FROM departments WHERE dept_id='$id'");
     header("location:headdash.php?q=manage_dept");
+    exit;
+  } else {
+    header("location:admin_login.php?w=Session expired. Please login again.");
+    exit;
   }
 }
-?>
+
+// RESET ALL USER EXAM (Admin)
+if (@$_GET['q'] == 'reset_all_exam') {
+  if (isset($_SESSION['key']) && ($_SESSION['key'] == 'sunny7785068889' || $_SESSION['key'] == 'prasanth123')) {
+    $eid = $_POST['eid'];
+    $q = mysqli_query($con, "SELECT email, score FROM history WHERE eid='$eid'");
+    while ($row = mysqli_fetch_array($q)) {
+      $uemail = $row['email'];
+      $score = $row['score'];
+      mysqli_query($con, "UPDATE rank SET score = score - $score WHERE email='$uemail'");
+    }
+    mysqli_query($con, "DELETE FROM history WHERE eid='$eid'");
+    header("location:headdash.php?q=manage_quiz&eid=$eid");
+    exit;
+  } else {
+    header("location:admin_login.php?w=Session expired. Please login again.");
+    exit;
+  }
+}
+
+// TOGGLE EXAM STATUS (Admin/Teacher)
+if (@$_GET['q'] == 'toggle_exam_status') {
+  if (isset($_SESSION['key']) && ($_SESSION['key'] == 'sunny7785068889' || $_SESSION['key'] == 'prasanth123')) {
+    $eid = @$_GET['eid'];
+    $status = @$_GET['status'];
+    mysqli_query($con, "UPDATE quiz SET status='$status' WHERE eid='$eid'");
+    if (@$_GET['from'] == 'admin') {
+      header("location:headdash.php?q=manage_quiz&eid=$eid");
+    } else {
+      header("location:dash.php?q=manage_quiz&eid=$eid");
+    }
+    exit;
+  } else {
+    header("location:admin_login.php?w=Session expired. Please login again.");
+    exit;
+  }
+}
+
+// CHECK TIME (Polling)
+if (@$_GET['q'] == 'check_time' && @$_GET['eid']) {
+  $eid = @$_GET['eid'];
+  $q = mysqli_query($con, "SELECT time FROM quiz WHERE eid='$eid'");
+  if ($row = mysqli_fetch_array($q)) {
+    echo $row['time'];
+  }
+  exit;
+}

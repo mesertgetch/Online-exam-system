@@ -1,8 +1,8 @@
 <?php
 include_once 'dbConnection.php';
 session_start();
-if (!(isset($_SESSION['email']))) {
-  header("location:admin_login.php");
+if (!(isset($_SESSION['email'])) || !(isset($_SESSION['key']))) {
+  header("location:admin_login.php?w=Session expired. Please login again.");
   exit;
 }
 $email = $_SESSION['email'];
@@ -468,7 +468,7 @@ $name = $_SESSION['name'];
       <div class="sidebar-label">Dashboard</div>
       <a href="dash.php?q=0" class="nav-item <?php if (@$_GET['q'] == 0 && !@$_GET['step'])
         echo 'active'; ?>">
-        <span class="material-icons">home</span> My Quizzes
+        <span class="material-icons">home</span> My Exams
       </a>
       <a href="dash.php?q=1" class="nav-item <?php if (@$_GET['q'] == 1)
         echo 'active'; ?>">
@@ -478,14 +478,14 @@ $name = $_SESSION['name'];
         echo 'active'; ?>">
         <span class="material-icons">leaderboard</span> Ranking
       </a>
-      <div class="sidebar-label">Quiz Management</div>
+      <div class="sidebar-label">Exam Management</div>
       <a href="dash.php?q=4" class="nav-item <?php if (@$_GET['q'] == 4)
         echo 'active'; ?>">
-        <span class="material-icons">add_circle</span> Add Quiz
+        <span class="material-icons">add_circle</span> Add Exam
       </a>
       <a href="dash.php?q=5" class="nav-item <?php if (@$_GET['q'] == 5)
         echo 'active'; ?>">
-        <span class="material-icons">delete_sweep</span> Remove Quiz
+        <span class="material-icons">delete_sweep</span> Remove Exam
       </a>
     </div>
     <div class="sidebar-footer">
@@ -509,18 +509,19 @@ $name = $_SESSION['name'];
 
   <main class="main">
 
-    <!-- HOME: My Quizzes -->
+    <!-- HOME: My Exams -->
     <?php if (@$_GET['q'] == 0) { ?>
       <div class="page-header">
-        <h1>My Quizzes</h1>
-        <p>Quizzes you have created</p>
+        <h1>My Exams</h1>
+        <p>Exams you have created</p>
       </div>
       <div class="card">
         <table class="data-table">
           <thead>
             <tr>
               <th>#</th>
-              <th>Topic</th>
+              <th>Exam Name</th>
+              <th>Status</th>
               <th>Questions</th>
               <th>Marks</th>
               <th>+</th>
@@ -534,7 +535,9 @@ $name = $_SESSION['name'];
             $result = mysqli_query($con, "SELECT * FROM quiz WHERE email='$email' ORDER BY date DESC") or die('Error');
             $c = 1;
             while ($row = mysqli_fetch_array($result)) {
-              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['sahi'] . '</td><td>' . $row['wrong'] . '</td><td>' . $row['time'] . ' min</td>
+              $status = @$row['status'] ?: 'active';
+              $status_color = ($status == 'active' ? '#2ecc71' : '#e74c3c');
+              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td><span class="badge" style="background:' . $status_color . ';color:#fff;padding:2px 6px;border-radius:4px;font-size:10px;text-transform:uppercase">' . $status . '</span></td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['sahi'] . '</td><td>' . $row['wrong'] . '</td><td>' . $row['time'] . ' min</td>
               <td><a href="dash.php?q=manage_quiz&eid=' . $row['eid'] . '" class="btn-action btn-primary" style="margin-right:5px"><span class="material-icons" style="font-size:16px">edit</span> Manage</a></td></tr>';
             }
             ?>
@@ -547,14 +550,14 @@ $name = $_SESSION['name'];
     <?php if (@$_GET['q'] == 1) { ?>
       <div class="page-header">
         <h1>Student Scores</h1>
-        <p>Scores for your quizzes</p>
+        <p>Scores for your exams</p>
       </div>
       <div class="card">
         <table class="data-table">
           <thead>
             <tr>
               <th>#</th>
-              <th>Quiz</th>
+              <th>Exam Name</th>
               <th>Student</th>
               <th>College</th>
               <th>Score</th>
@@ -618,13 +621,13 @@ $name = $_SESSION['name'];
     <!-- ADD QUIZ STEP 1 -->
     <?php if (@$_GET['q'] == 4 && !@$_GET['step']) { ?>
       <div class="page-header">
-        <h1>Create New Quiz</h1>
-        <p>Enter the quiz details below</p>
+        <h1>Create New Exam</h1>
+        <p>Enter the exam details below</p>
       </div>
       <div class="card" style="max-width:600px">
         <form action="update.php?q=addquiz" method="POST">
           <div class="form-group">
-            <label>Quiz Title</label>
+            <label>Exam Title</label>
             <input name="name" type="text" placeholder="e.g. Data Structures Midterm" required>
           </div>
           <div class="form-group">
@@ -658,7 +661,16 @@ $name = $_SESSION['name'];
           <div class="form-row">
             <div class="form-group">
               <label>Target Department (Optional)</label>
-              <input name="target_dept" type="text" placeholder="e.g. Computer Science (Leave empty for all)">
+              <select name="target_dept"
+                style="appearance:auto;padding:11px 16px;border-radius:10px;border:1px solid var(--border-input);background:var(--bg-input);color:var(--text-primary);width:100%">
+                <option value="">All Departments</option>
+                <?php
+                $d_query = mysqli_query($con, "SELECT * FROM departments ORDER BY dept_name ASC");
+                while ($d_row = mysqli_fetch_array($d_query)) {
+                  echo "<option value='" . $d_row['dept_name'] . "'>" . $d_row['dept_name'] . "</option>";
+                }
+                ?>
+              </select>
             </div>
             <div class="form-group">
               <label>Target Year (Optional)</label>
@@ -673,10 +685,10 @@ $name = $_SESSION['name'];
             </div>
           </div>
           <div class="form-group">
-            <label>Description</label>
-            <textarea name="desc" placeholder="Write quiz description..."></textarea>
+            <label>Exam Description</label>
+            <textarea name="desc" placeholder="Write exam description..."></textarea>
           </div>
-          <button type="submit" class="btn-submit">Create Quiz &amp; Add Questions</button>
+          <button type="submit" class="btn-submit">Create Exam &amp; Add Questions</button>
         </form>
       </div>
     <?php } ?>
@@ -793,18 +805,18 @@ $name = $_SESSION['name'];
       </div>
     <?php } ?>
 
-    <!-- REMOVE QUIZ -->
+    <!-- REMOVE EXAM -->
     <?php if (@$_GET['q'] == 5) { ?>
       <div class="page-header">
-        <h1>Remove Quiz</h1>
-        <p>Delete quizzes you've created</p>
+        <h1>Remove Exam</h1>
+        <p>Delete exams you've created</p>
       </div>
       <div class="card">
         <table class="data-table">
           <thead>
             <tr>
               <th>#</th>
-              <th>Topic</th>
+              <th>Exam Name</th>
               <th>Questions</th>
               <th>Marks</th>
               <th>Time</th>
@@ -842,17 +854,17 @@ $name = $_SESSION['name'];
       }
       ?>
       <div class="page-header">
-        <h1>Manage Quiz: <?php echo $title; ?></h1>
+        <h1>Manage Exam: <?php echo $title; ?></h1>
         <p>Edit details and questions</p>
       </div>
 
-      <!-- Quiz Details Form -->
+      <!-- Exam Details Form -->
       <div class="card">
-        <h3>Quiz Details</h3>
+        <h3>Exam Details</h3>
         <form action="update.php?q=editquiz&eid=<?php echo $eid; ?>" method="POST">
           <div class="form-row">
             <div class="form-group">
-              <label>Quiz Title</label>
+              <label>Exam Title</label>
               <input name="name" type="text" value="<?php echo $title; ?>" required>
             </div>
             <div class="form-group">
@@ -860,31 +872,64 @@ $name = $_SESSION['name'];
               <input name="time" type="number" value="<?php echo $time; ?>" required>
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Target Dept</label>
-              <input name="target_dept" type="text" value="<?php echo $target_dept; ?>" placeholder="Leave empty for all">
-            </div>
-            <div class="form-group">
-              <label>Target Year</label>
-              <select name="target_year" style="appearance:auto;padding:13px 16px;">
-                <option value="" <?php if ($target_year == '')
-                  echo 'selected'; ?>>All Years</option>
-                <option value="1st Year" <?php if ($target_year == '1st Year')
-                  echo 'selected'; ?>>1st Year</option>
-                <option value="2nd Year" <?php if ($target_year == '2nd Year')
-                  echo 'selected'; ?>>2nd Year</option>
-                <option value="3rd Year" <?php if ($target_year == '3rd Year')
-                  echo 'selected'; ?>>3rd Year</option>
-                <option value="4th Year" <?php if ($target_year == '4th Year')
-                  echo 'selected'; ?>>4th Year</option>
-                <option value="5th Year" <?php if ($target_year == '5th Year')
-                  echo 'selected'; ?>>5th Year</option>
-              </select>
+      </div>
+
+      <!-- Exam Status Toggle -->
+      <?php $status = @$row['status'] ?: 'active'; ?>
+      <div class="form-group"
+        style="margin:20px 0;padding:16px;background:var(--bg-card-hover);border-radius:12px;border:1px solid var(--border-primary)">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <label style="margin-bottom:4px;display:block;font-weight:600">Exam Release Status</label>
+            <div style="font-size:14px;color:var(--text-secondary)">
+              Current Status: <span class="badge"
+                style="background:<?php echo ($status == 'active' ? '#2ecc71' : '#e74c3c'); ?>;color:#fff;padding:4px 10px;border-radius:6px;text-transform:uppercase;font-size:11px;font-weight:700"><?php echo ucfirst($status); ?></span>
             </div>
           </div>
-          <button type="submit" class="btn-submit" style="width:auto;padding:10px 24px">Update Details</button>
-        </form>
+          <a href="update.php?q=toggle_exam_status&eid=<?php echo $eid; ?>&status=<?php echo ($status == 'active' ? 'disabled' : 'active'); ?>&from=teacher"
+            class="btn-action <?php echo ($status == 'active' ? 'btn-danger' : 'btn-success'); ?>"
+            style="padding:10px 20px;border-radius:8px;text-decoration:none;font-weight:600">
+            <?php echo ($status == 'active' ? 'Disable Exam' : 'Release Exam (Make Active)'); ?>
+          </a>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Target Dept</label>
+          <select name="target_dept" style="appearance:auto;padding:13px 16px;">
+            <option value="" <?php if ($target_dept == '')
+              echo 'selected'; ?>>All Departments</option>
+            <?php
+            $d_query = mysqli_query($con, "SELECT * FROM departments ORDER BY dept_name ASC");
+            while ($d_row = mysqli_fetch_array($d_query)) {
+              $dept = $d_row['dept_name'];
+              $sel = ($dept == $target_dept) ? 'selected' : '';
+              echo "<option value='$dept' $sel>$dept</option>";
+            }
+            ?>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Target Year</label>
+          <select name="target_year" style="appearance:auto;padding:13px 16px;">
+            <option value="" <?php if ($target_year == '')
+              echo 'selected'; ?>>All Years</option>
+            <option value="1st Year" <?php if ($target_year == '1st Year')
+              echo 'selected'; ?>>1st Year</option>
+            <option value="2nd Year" <?php if ($target_year == '2nd Year')
+              echo 'selected'; ?>>2nd Year</option>
+            <option value="3rd Year" <?php if ($target_year == '3rd Year')
+              echo 'selected'; ?>>3rd Year</option>
+            <option value="4th Year" <?php if ($target_year == '4th Year')
+              echo 'selected'; ?>>4th Year</option>
+            <option value="5th Year" <?php if ($target_year == '5th Year')
+              echo 'selected'; ?>>5th Year</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit" class="btn-submit" style="width:auto;padding:10px 24px">Update Details</button>
+      </form>
       </div>
 
       <!-- Questions List -->
