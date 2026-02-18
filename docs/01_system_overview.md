@@ -30,32 +30,17 @@ V
 
 ```mermaid
 graph TD
+
     subgraph Roles
-        S["🎓 Student"]Thank you very much for your kind willingness to write a strong letter of support for me. I truly appreciate it.
-
-The position I am applying for is Networking and System Design Lab Instructor. The role mainly involves:
-
-Conducting practical lab sessions in computer networking and system design
-
-Assisting students with hands-on configuration, troubleshooting, and implementation
-
-Supporting course delivery through lab demonstrations and technical guidance
-
-Preparing lab materials and ensuring proper documentation
-
-Evaluating student lab performance and providing feedback
-
-The focus is on practical networking skills (such as network configuration, routing, switching, and basic server setup) as well as system design principles and implementation.
-
-If possible, I would kindly need the letter within [insert deadline, e.g., one week / by March 1]. Please let me know if you need any additional information such as my CV or specific achievements to include.
-
-Thank you again for your support — I truly appreciate your time and encouragemen
-        T["👨‍🏫 Teacher (role=admin)"]
-        H["🛡️ Head Admin (role=head)"]
+        S["Student"]
+        T["Teacher (role=admin)"]
+        H["Head Admin (role=head)"]
     end
+
     S -->|"login via index.php"| A["account.php<br>Student Dashboard"]
     T -->|"login via admin_login.php"| D["dash.php<br>Teacher Dashboard"]
     H -->|"login via admin_login.php"| HD["headdash.php<br>Admin Dashboard"]
+
 ```
 
 | Role       | DB Table | Login Handler       | Dashboard      |
