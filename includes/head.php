@@ -2,7 +2,7 @@
 include_once __DIR__ . '/../config/dbConnection.php';
 $ref = @$_GET['q'];
 $email = $_POST['uname'];
-$password = $_POST['password'];
+$password = md5($_POST['password']);
 
 
 $result = mysqli_query($con, "SELECT email FROM admin WHERE email = '$email' and password = '$password' and role = 'head'") or die('Error');
@@ -15,7 +15,7 @@ if ($count == 1) {
     $_SESSION["name"] = 'Admin';
     $_SESSION["key"] = 'prasanth123';
     $_SESSION["email"] = $email;
-    header("location:headdash.php?q=0");
+    header("location:../headdash.php?q=0");
 } else
-    header("location:admin_login.php?w=Warning : Access denied");
+    header("location:../admin_login.php?w=Warning : Access denied");
 ?>

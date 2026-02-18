@@ -577,6 +577,39 @@ if (@$_GET['q'] == 'update_user') {
   }
 }
 
+// UPDATE ADMIN/TEACHER (Admin)
+if (@$_GET['q'] == 'update_admin') {
+  if (isset($_SESSION['key']) && ($_SESSION['key'] == 'sunny7785068889' || $_SESSION['key'] == 'prasanth123')) {
+    $old_email = $_POST['old_email'];
+    $new_email = $_POST['new_email'];
+    $new_password = @$_POST['new_password'];
+    $redirect = @$_POST['redirect'] ?: 'headdash.php?q=5';
+
+    $sql = "UPDATE admin SET email='" . mysqli_real_escape_string($con, $new_email) . "'";
+    if (!empty($new_password)) {
+      $hashed = md5($new_password);
+      $sql .= ", password='$hashed'";
+    }
+    $sql .= " WHERE email='" . mysqli_real_escape_string($con, $old_email) . "'";
+    mysqli_query($con, $sql);
+
+    // Update quiz ownership if email changed
+    if ($old_email !== $new_email) {
+      mysqli_query($con, "UPDATE quiz SET email='" . mysqli_real_escape_string($con, $new_email) . "' WHERE email='" . mysqli_real_escape_string($con, $old_email) . "'");
+      // Update session if editing own account
+      if ($_SESSION['email'] === $old_email) {
+        $_SESSION['email'] = $new_email;
+      }
+    }
+
+    header("location:" . $redirect);
+    exit;
+  } else {
+    header("location:admin_login.php?w=Session expired. Please login again.");
+    exit;
+  }
+}
+
 // CHECK TIME (Polling)
 if (@$_GET['q'] == 'check_time' && @$_GET['eid']) {
   $eid = @$_GET['eid'];

@@ -540,9 +540,9 @@ $name = $_SESSION['name'];
         echo 'active'; ?>">
         <span class="material-icons">admin_panel_settings</span> Add Teacher
       </a>
-      <a href="headdash.php?q=5" class="nav-item <?php if (@$_GET['q'] == 5)
+      <a href="headdash.php?q=5" class="nav-item <?php if (@$_GET['q'] == 5 || @$_GET['q'] == 'edit_admin')
         echo 'active'; ?>">
-        <span class="material-icons">person_remove</span> Remove Teacher
+        <span class="material-icons">manage_accounts</span> Manage Teachers
       </a>
       <a href="headdash.php?q=manage_dept" class="nav-item <?php if (@$_GET['q'] == 'manage_dept')
         echo 'active'; ?>">
@@ -557,10 +557,13 @@ $name = $_SESSION['name'];
       </div>
       <div class="user-info">
         <div class="avatar"><span class="material-icons" style="font-size:18px">shield</span></div>
-        <div>
+        <div style="flex:1">
           <div class="user-name">System Admin</div>
           <div class="user-email"><?php echo htmlspecialchars($email); ?></div>
         </div>
+        <a href="headdash.php?q=edit_admin&email=<?php echo urlencode($email); ?>" title="Edit my account" style="color:var(--text-dimmed);display:flex;align-items:center;padding:4px;border-radius:6px;transition:color 0.2s">
+          <span class="material-icons" style="font-size:18px">edit</span>
+        </a>
       </div>
       <a href="logout.php?q=admin_login.php" class="btn-signout">
         <span class="material-icons" style="font-size:18px">logout</span> Sign Out
@@ -1070,32 +1073,81 @@ $name = $_SESSION['name'];
       </div>
     <?php } ?>
 
-    <!-- REMOVE TEACHER -->
+    <!-- MANAGE TEACHERS -->
     <?php if (@$_GET['q'] == 5) { ?>
       <div class="page-header">
         <h1>Manage Teachers</h1>
-        <p>Remove teacher accounts</p>
+        <p>Edit or remove teacher accounts</p>
       </div>
       <div class="card">
         <table class="data-table">
           <thead>
             <tr>
+              <th>#</th>
               <th>Email</th>
-              <th></th>
+              <th>Role</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <?php
             $result = mysqli_query($con, "SELECT * FROM admin WHERE role='admin'") or die('Error');
+            $c = 1;
             while ($row = mysqli_fetch_array($result)) {
-              echo '<tr><td>' . $row['email'] . '</td>';
-              echo '<td><a href="update.php?demail1=' . $row['email'] . '" class="btn-action btn-danger"><span class="material-icons" style="font-size:16px">delete</span> Remove</a></td></tr>';
+              echo '<tr><td>' . $c++ . '</td><td>' . htmlspecialchars($row['email']) . '</td><td><span style="background:var(--bg-input);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--text-primary)">' . htmlspecialchars($row['role']) . '</span></td>';
+              echo '<td style="display:flex;gap:6px">';
+              echo '<a href="headdash.php?q=edit_admin&email=' . urlencode($row['email']) . '" class="btn-action btn-primary" title="Edit teacher"><span class="material-icons" style="font-size:16px">edit</span></a>';
+              echo '<a href="update.php?demail1=' . urlencode($row['email']) . '" class="btn-action btn-danger" title="Delete teacher" onclick="return confirm(\'Delete this teacher account?\')" ><span class="material-icons" style="font-size:16px">delete</span></a>';
+              echo '</td></tr>';
             }
             ?>
           </tbody>
         </table>
       </div>
     <?php } ?>
+
+    <!-- EDIT ADMIN/TEACHER -->
+    <?php if (@$_GET['q'] == 'edit_admin') {
+      $aemail = @$_GET['email'];
+      $aq = mysqli_query($con, "SELECT * FROM admin WHERE email='" . mysqli_real_escape_string($con, $aemail) . "'");
+      $arow = mysqli_fetch_array($aq);
+      if ($arow) {
+        $is_head = ($arow['role'] === 'head');
+        $page_title = $is_head ? 'Edit System Admin Account' : 'Edit Teacher Account';
+        $back_link = $is_head ? 'headdash.php?q=0' : 'headdash.php?q=5';
+        $redirect_val = $is_head ? 'headdash.php?q=0' : 'headdash.php?q=5';
+        ?>
+        <div class="page-header">
+          <h1><?php echo $page_title; ?></h1>
+          <p>Update credentials for <?php echo htmlspecialchars($arow['email']); ?></p>
+        </div>
+        <div class="card" style="max-width:550px">
+          <form action="update.php?q=update_admin" method="POST">
+            <input type="hidden" name="old_email" value="<?php echo htmlspecialchars($arow['email']); ?>">
+            <input type="hidden" name="redirect" value="<?php echo $redirect_val; ?>">
+            <div class="form-group">
+              <label>Email (Username)</label>
+              <input name="new_email" type="email" value="<?php echo htmlspecialchars($arow['email']); ?>" required>
+            </div>
+            <div class="form-group">
+              <label>New Password <span style="color:var(--text-dimmed);font-weight:400">(leave blank to keep
+                  current)</span></label>
+              <input name="new_password" type="password" placeholder="Enter new password" minlength="5">
+            </div>
+            <div style="display:flex;gap:12px;margin-top:8px">
+              <button type="submit" class="btn-submit" style="flex:1">Save Changes</button>
+              <a href="<?php echo $back_link; ?>" class="btn-action btn-danger"
+                style="display:flex;align-items:center;justify-content:center;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:600">Cancel</a>
+            </div>
+          </form>
+        </div>
+      <?php } else { ?>
+        <div class="card" style="text-align:center;padding:32px">
+          <p style="color:var(--text-dimmed)">Account not found.</p>
+          <a href="headdash.php?q=5" style="color:#a885ff">Back to Teachers</a>
+        </div>
+      <?php }
+    } ?>
 
     <!-- ADD EXAM (Admin) -->
     <?php if (@$_GET['q'] == 6 && !@$_GET['step']) { ?>

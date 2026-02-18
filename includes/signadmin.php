@@ -6,14 +6,14 @@ $ref = @$_GET['q'];
 //$gender = $_POST['gender'];
 $email = $_POST['email'];
 
-$password = $_POST['password'];
+$password = md5($_POST['password']);
 
 
 
 $q = mysqli_query($con, "INSERT INTO admin VALUES  ('$email' , '$password' , 'admin')");
 
 
-header("location:$ref?q=Succesfully registered");
+header("location:../$ref?q=Succesfully registered");
 
 
 ?>
