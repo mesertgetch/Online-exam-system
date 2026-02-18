@@ -75,7 +75,7 @@ if (isset($_SESSION['key'])) {
     $target_dept = @$_POST['target_dept'];
     $target_year = @$_POST['target_year'];
     $id = uniqid();
-    $q3 = mysqli_query($con, "INSERT INTO quiz VALUES  ('$id','$name' , '$sahi' , '$wrong','$total','$time' ,'$desc','$tag', NOW() ,'$email', '$access_code', '$target_dept', '$target_year')");
+    $q3 = mysqli_query($con, "INSERT INTO quiz VALUES  ('$id','$name' , '$sahi' , '$wrong','$total','$time' ,'$desc','$tag', NOW() ,'$email', '$access_code', '$target_dept', '$target_year', 'active')");
 
     if (@$_GET['from'] == 'admin') {
       header("location:headdash.php?q=6&step=2&eid=$id&n=$total");
@@ -87,10 +87,12 @@ if (isset($_SESSION['key'])) {
 
 //add question
 if (isset($_SESSION['key'])) {
-  if (@$_GET['q'] == 'addqns' && $_SESSION['key'] == 'prasanth123') {
+  file_put_contents("/opt/lampp/htdocs/Online-exam-system/debug_log.txt", "Session key is set: " . $_SESSION['key'] . "\n", FILE_APPEND);
+  if (@$_GET['q'] == 'addqns' && ($_SESSION['key'] == 'prasanth123' || $_SESSION['key'] == 'sunny7785068889')) {
     $n = @$_GET['n'];
     $eid = @$_GET['eid'];
     $ch = @$_GET['ch'];
+    file_put_contents("/opt/lampp/htdocs/Online-exam-system/debug_log.txt", "Processing addqns. N: $n, EID: $eid\n", FILE_APPEND);
 
     for ($i = 1; $i <= $n; $i++) {
       $qid = uniqid();
@@ -98,9 +100,11 @@ if (isset($_SESSION['key'])) {
       $type = $_POST['type' . $i]; // Capture question type
 
       // Insert question with type
-      mysqli_query($con, "INSERT INTO questions VALUES  ('$eid','$qid','$qns' , '$ch' , '$i', '$type')") or die('Error60');
+      if (!mysqli_query($con, "INSERT INTO questions VALUES  ('$eid','$qid','$qns' , '$ch' , '$i', '$type')")) {
+        file_put_contents("/opt/lampp/htdocs/Online-exam-system/debug_log.txt", "SQL Error (Insert Q): " . mysqli_error($con) . "\n", FILE_APPEND);
+      }
 
-      if ($type == 'mcq' || empty($type)) {
+      if ($type == 'mcq' || $type == 'code' || empty($type)) {
         $a = $_POST[$i . '1'];
         $b = $_POST[$i . '2'];
         $c = $_POST[$i . '3'];
@@ -314,10 +318,10 @@ if (@$_GET['q'] == 'submitexam') {
 
       $is_correct = false;
 
-      if ($type == 'mcq' || empty($type)) {
+      if ($type == 'mcq' || $type == 'code' || empty($type)) {
         if ($user_ans == $ansid)
           $is_correct = true;
-      } else if ($type == 'short' || $type == 'code') {
+      } else if ($type == 'short') {
         // Normalize strings: trim, lowercase
         if (trim(strtolower($user_ans)) == trim(strtolower($ansid)))
           $is_correct = true;

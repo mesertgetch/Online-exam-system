@@ -875,7 +875,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
     
       // Fetch all questions and options
       $questions = [];
-      $q_sql = mysqli_query($con, "SELECT * FROM questions WHERE eid='$eid' ORDER BY sn ASC");
+      $q_sql = mysqli_query($con, "SELECT * FROM questions WHERE eid='$eid' ORDER BY RAND()");
       while ($q_row = mysqli_fetch_assoc($q_sql)) {
         $qid = $q_row['qid'];
         $opts_sql = mysqli_query($con, "SELECT * FROM options WHERE qid='$qid'");
@@ -1229,6 +1229,202 @@ while ($row_u = mysqli_fetch_array($q_user)) {
             padding: 20px;
           }
         }
+
+        /* CODE SNIPPET QUESTION STYLES */
+        .q-text pre {
+          background: #0d1117;
+          color: #e6edf3;
+          padding: 20px 24px;
+          border-radius: 10px;
+          overflow-x: auto;
+          font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+          font-size: 14px;
+          line-height: 1.7;
+          margin: 16px 0;
+          border: 1px solid #30363d;
+          tab-size: 4;
+          white-space: pre;
+          position: relative;
+        }
+
+        .q-text code {
+          background: rgba(255, 255, 255, 0.08);
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-family: 'JetBrains Mono', 'Fira Code', monospace;
+          font-size: 0.9em;
+          color: var(--accent);
+        }
+
+        .q-text pre code {
+          background: none;
+          padding: 0;
+          border-radius: 0;
+          font-size: inherit;
+          color: inherit;
+        }
+
+        /* Syntax highlighting colors */
+        .syn-keyword {
+          color: #ff7b72;
+          font-weight: 600;
+        }
+
+        .syn-type {
+          color: #79c0ff;
+        }
+
+        .syn-string {
+          color: #a5d6ff;
+        }
+
+        .syn-comment {
+          color: #8b949e;
+          font-style: italic;
+        }
+
+        .syn-number {
+          color: #79c0ff;
+        }
+
+        .syn-method {
+          color: #d2a8ff;
+        }
+
+        .syn-paren {
+          color: #e6edf3;
+        }
+
+        .syn-operator {
+          color: #ff7b72;
+        }
+
+        /* Code-style MCQ option cards for code questions */
+        .code-option-card {
+          display: flex;
+          align-items: flex-start;
+          gap: 0;
+          padding: 0;
+          background: #0d1117;
+          border: 1px solid #30363d;
+          border-radius: 10px;
+          margin-bottom: 12px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .code-option-card:hover {
+          border-color: var(--accent);
+          box-shadow: 0 0 0 1px rgba(79, 172, 254, 0.2);
+        }
+
+        .code-option-card.selected {
+          border-color: var(--accent);
+          box-shadow: 0 0 0 2px rgba(79, 172, 254, 0.3);
+        }
+
+        .code-option-indicator {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          min-height: 100%;
+          background: rgba(255, 255, 255, 0.04);
+          border-right: 1px solid #30363d;
+          color: #8b949e;
+          font-size: 14px;
+          font-weight: 600;
+          flex-shrink: 0;
+          transition: all 0.2s;
+          align-self: stretch;
+        }
+
+        .code-option-card:hover .code-option-indicator {
+          color: var(--accent);
+          background: rgba(79, 172, 254, 0.08);
+        }
+
+        .code-option-card.selected .code-option-indicator {
+          background: var(--accent);
+          color: #fff;
+          border-right-color: var(--accent);
+        }
+
+        .code-option-content {
+          color: #e6edf3;
+          font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+          font-size: 14px;
+          line-height: 1.6;
+          padding: 14px 18px;
+          flex: 1;
+          white-space: pre;
+          overflow-x: auto;
+        }
+
+        /* NEW MCQ OPTION CARD STYLES */
+        .mcq-option-card {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 16px 20px;
+          background: transparent;
+          border: 1px solid var(--border-primary);
+          border-radius: 12px;
+          margin-bottom: 12px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          position: relative;
+        }
+
+        .mcq-option-card:hover {
+          border-color: var(--accent);
+          background: rgba(255, 255, 255, 0.02);
+        }
+
+        .mcq-option-card.selected {
+          border-color: var(--accent);
+          background: rgba(79, 172, 254, 0.1);
+          box-shadow: 0 0 0 1px var(--accent);
+        }
+
+        .option-indicator {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: 1px solid var(--text-muted);
+          color: var(--text-muted);
+          font-size: 14px;
+          font-weight: 600;
+          flex-shrink: 0;
+          transition: all 0.2s;
+        }
+
+        .mcq-option-card:hover .option-indicator {
+          border-color: var(--accent);
+          color: var(--accent);
+        }
+
+        .mcq-option-card.selected .option-indicator {
+          background: var(--accent);
+          border-color: var(--accent);
+          color: #fff;
+        }
+
+        .option-content {
+          color: var(--text-secondary);
+          font-size: 15px;
+          line-height: 1.5;
+          flex: 1;
+        }
+
+        .mcq-option-card.selected .option-content {
+          color: var(--text-primary);
+        }
       </style>
 
       <div id="lockdown-warning" class="blur-overlay">
@@ -1435,29 +1631,131 @@ while ($row_u = mysqli_fetch_array($q_user)) {
           });
         }
 
+        // Simple syntax highlighter for code blocks
+        function highlightSyntax(code) {
+          // Escape HTML first
+          let escaped = code
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+          
+          // Apply syntax highlighting with spans
+          // Comments (// and /* */)
+          escaped = escaped.replace(/(\/\/.*$)/gm, '<span class="syn-comment">$1</span>');
+          escaped = escaped.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="syn-comment">$1</span>');
+          // Strings
+          escaped = escaped.replace(/("(?:[^"\\]|\\.)*")/g, '<span class="syn-string">$1</span>');
+          escaped = escaped.replace(/('(?:[^'\\]|\\.)*')/g, '<span class="syn-string">$1</span>');
+          // Keywords (Java, Python, C, C++)
+          const keywords = ['abstract','assert','boolean','break','byte','case','catch','char','class','const','continue','def','default','do','double','elif','else','enum','extends','final','finally','float','for','from','goto','if','implements','import','in','instanceof','int','interface','is','lambda','long','native','new','not','or','and','package','pass','private','print','protected','public','raise','return','short','static','strictfp','super','switch','synchronized','this','throw','throws','transient','try','void','volatile','while','with','yield','String','System','Math','null','true','false','True','False','None','self','def','class','elif','except','exec','lambda','range','len','input','output','cout','cin','endl','printf','scanf','include','define','using','namespace','std','main','println'];
+          const keywordRegex = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'g');
+          escaped = escaped.replace(keywordRegex, (match) => {
+            // Don't highlight inside already-highlighted spans
+            return '<span class="syn-keyword">' + match + '</span>';
+          });
+          // Types
+          const types = ['int','float','double','char','boolean','byte','short','long','void','String','Integer','Boolean','Double','Float','List','Map','Set','Array','Object'];
+          const typeRegex = new RegExp('(?<![\\w])(' + types.join('|') + ')(?![\\w])', 'g');
+          // Numbers
+          escaped = escaped.replace(/\b(\d+\.?\d*)\b/g, '<span class="syn-number">$1</span>');
+          // Method calls like .print( or .println(
+          escaped = escaped.replace(/\.([a-zA-Z_]\w*)\s*\(/g, '.<span class="syn-method">$1</span>(');
+
+          return escaped;
+        }
+
+        // Format question text - detect code blocks and apply highlighting
+        function formatQuestionText(text, isCodeType) {
+          if (!text) return '';
+          
+          // If text contains <pre> or ``` markers, parse them
+          let formatted = text;
+          
+          // Handle ``` code blocks (markdown style)
+          formatted = formatted.replace(/```(\w*)\n?([\s\S]*?)```/g, (match, lang, code) => {
+            return '<pre><code>' + highlightSyntax(code.trim()) + '</code></pre>';
+          });
+          
+          // Handle <pre> tags already in text
+          formatted = formatted.replace(/<pre>([\s\S]*?)<\/pre>/g, (match, code) => {
+            return '<pre><code>' + highlightSyntax(code.trim()) + '</code></pre>';
+          });
+          
+          // For code-type questions: if no code block was detected, check for multi-line 
+          // content that looks like code (contains brackets, semicolons, indentation)
+          if (isCodeType && !formatted.includes('<pre>')) {
+            const lines = formatted.split('\n');
+            let textPart = [];
+            let codePart = [];
+            let inCode = false;
+            
+            for (let line of lines) {
+              const looksLikeCode = /[{}();=<>]/.test(line) || /^\s{2,}/.test(line) || /^(int|for|if|while|def|class|public|private|void|return|import|from|print|System)/.test(line.trim());
+              if (looksLikeCode && !inCode) {
+                inCode = true;
+              }
+              if (inCode) {
+                codePart.push(line);
+              } else {
+                textPart.push(line);
+              }
+            }
+            
+            if (codePart.length > 0) {
+              formatted = textPart.join('\n');
+              if (formatted.trim()) formatted += '\n';
+              formatted += '<pre><code>' + highlightSyntax(codePart.join('\n')) + '</code></pre>';
+            }
+          }
+          
+          // Convert remaining newlines to <br> outside of <pre> blocks
+          formatted = formatted.replace(/([^>])\n/g, '$1<br>');
+          
+          return formatted;
+        }
+
         function showQ(idx) {
           currentIdx = idx;
           const q = questions[idx];
           const container = document.getElementById('qContainer');
           const selected = answers[q.qid];
+          const isCodeType = q.question_type === 'code';
+
+          let questionHtml = isCodeType ? formatQuestionText(q.qns, true) : q.qns;
 
           let html = `
           <button type="button" class="btn-flag ${flags[q.qid] ? 'active' : ''}" onclick="toggleFlag('${q.qid}')">
             <span class="material-icons">${flags[q.qid] ? 'flag' : 'outlined_flag'}</span>
           </button>
           <h3 style="color:var(--text-muted);font-size:14px;margin-bottom:10px">Question ${idx + 1} of ${questions.length}</h3>
-          <div class="q-text">${q.qns}</div>
+          <div class="q-text">${questionHtml}</div>
         `;
 
           if (q.question_type === 'mcq' || !q.question_type) {
-            q.options.forEach(opt => {
+            const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+            q.options.forEach((opt, index) => {
+              const letter = letters[index] || '?';
+              const isSelected = selected === opt.optionid;
+
               html += `
-                <label class="opt-label ${selected === opt.optionid ? 'selected' : ''}">
-                  <input type="radio" name="temp_${q.qid}" value="${opt.optionid}" 
-                    ${selected === opt.optionid ? 'checked' : ''}
-                    onchange="selectAns('${q.qid}', '${opt.optionid}')">
-                  ${opt.option}
-                </label>
+                <div class="mcq-option-card ${isSelected ? 'selected' : ''}" onclick="selectAns('${q.qid}', '${opt.optionid}')">
+                   <div class="option-indicator">${letter}</div>
+                   <div class="option-content">${opt.option}</div>
+                </div>
+              `;
+            });
+          } else if (q.question_type === 'code' && q.options && q.options.length > 0) {
+            // Code type with MCQ options - render as code-styled cards
+            const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+            q.options.forEach((opt, index) => {
+              const letter = letters[index] || '?';
+              const isSelected = selected === opt.optionid;
+
+              html += `
+                <div class="code-option-card ${isSelected ? 'selected' : ''}" onclick="selectAns('${q.qid}', '${opt.optionid}')">
+                   <div class="code-option-indicator">${letter}</div>
+                   <div class="code-option-content">${opt.option}</div>
+                </div>
               `;
             });
           } else if (q.question_type === 'short' || q.question_type === 'code') {
@@ -1465,7 +1763,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
                 <textarea class="form-control" 
                     onchange="selectAns('${q.qid}', this.value, true)" 
                     oninput="selectAns('${q.qid}', this.value, true)"
-                    style="width:100%;height:150px;background:var(--bg-input);color:var(--text-primary);border:1px solid var(--border-input);border-radius:8px;padding:15px;font-family:monospace"
+                    style="width:100%;height:150px;background:#0d1117;color:#e6edf3;border:1px solid #30363d;border-radius:10px;padding:18px;font-family:'JetBrains Mono','Fira Code',monospace;font-size:14px;line-height:1.6"
                     placeholder="Type your answer here...">${selected || ''}</textarea>
             `;
           } else if (q.question_type === 'match') {
@@ -1501,9 +1799,8 @@ while ($row_u = mysqli_fetch_array($q_user)) {
           renderGrid();
           updateProgress();
           if (!isText) {
-            const labels = document.querySelectorAll('.opt-label');
-            labels.forEach(l => l.classList.remove('selected'));
-            event.target.closest('label').classList.add('selected');
+            // Re-render to update selection visually
+            showQ(currentIdx);
           }
         }
 

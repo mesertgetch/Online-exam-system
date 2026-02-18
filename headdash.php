@@ -608,6 +608,7 @@ $name = $_SESSION['name'];
             <tr>
               <th>#</th>
               <th>Exam Name</th>
+              <th>Access Code</th>
               <th>Questions</th>
               <th>Marks</th>
               <th>+</th>
@@ -620,7 +621,8 @@ $name = $_SESSION['name'];
             $result = mysqli_query($con, "SELECT * FROM quiz ORDER BY date DESC") or die('Error');
             $c = 1;
             while ($row = mysqli_fetch_array($result)) {
-              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['sahi'] . '</td><td>' . $row['wrong'] . '</td><td>' . $row['time'] . ' min</td></tr>';
+              $code = htmlspecialchars(@$row['access_code'] ?: '—');
+              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td><code style="background:var(--bg-input);padding:3px 8px;border-radius:6px;font-size:13px;letter-spacing:1px;font-weight:600;color:var(--text-primary)">' . $code . '</code></td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['sahi'] . '</td><td>' . $row['wrong'] . '</td><td>' . $row['time'] . ' min</td></tr>';
             }
             ?>
           </tbody>
@@ -671,97 +673,102 @@ $name = $_SESSION['name'];
       $uq = mysqli_query($con, "SELECT * FROM user WHERE email='$uemail'");
       $urow = mysqli_fetch_array($uq);
       if ($urow) {
-    ?>
-      <div class="page-header">
-        <h1>Edit Student</h1>
-        <p>Update information for <?php echo htmlspecialchars($urow['name']); ?></p>
-      </div>
-      <div class="card" style="max-width:550px">
-        <form action="update.php?q=update_user" method="POST">
-          <input type="hidden" name="email" value="<?php echo htmlspecialchars($urow['email']); ?>">
-          <div class="form-row">
-            <div class="form-group">
-              <label>Full Name</label>
-              <input name="name" type="text" value="<?php echo htmlspecialchars($urow['name']); ?>" required>
+        ?>
+        <div class="page-header">
+          <h1>Edit Student</h1>
+          <p>Update information for <?php echo htmlspecialchars($urow['name']); ?></p>
+        </div>
+        <div class="card" style="max-width:550px">
+          <form action="update.php?q=update_user" method="POST">
+            <input type="hidden" name="email" value="<?php echo htmlspecialchars($urow['email']); ?>">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input name="name" type="text" value="<?php echo htmlspecialchars($urow['name']); ?>" required>
+              </div>
+              <div class="form-group">
+                <label>Gender</label>
+                <select name="gender" style="appearance:auto" required>
+                  <option value="M" <?php if ($urow['gender'] == 'M')
+                    echo 'selected'; ?>>Male</option>
+                  <option value="F" <?php if ($urow['gender'] == 'F')
+                    echo 'selected'; ?>>Female</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Department</label>
+                <select id="edit-user-dept" name="college" style="appearance:auto" required
+                  onchange="updateEditUserYears()">
+                  <option value="" disabled>Select Department</option>
+                  <?php
+                  $dq = mysqli_query($con, "SELECT * FROM departments ORDER BY dept_name ASC");
+                  while ($dr = mysqli_fetch_array($dq)) {
+                    $sel = ($dr['dept_name'] == $urow['college']) ? 'selected' : '';
+                    echo '<option value="' . htmlspecialchars($dr['dept_name']) . '" data-years="' . htmlspecialchars($dr['year_labels']) . '" ' . $sel . '>' . htmlspecialchars($dr['dept_name']) . '</option>';
+                  }
+                  ?>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Year</label>
+                <select id="edit-user-year" name="year" style="appearance:auto">
+                  <option value="">Select Year</option>
+                </select>
+              </div>
             </div>
             <div class="form-group">
-              <label>Gender</label>
-              <select name="gender" style="appearance:auto" required>
-                <option value="M" <?php if ($urow['gender'] == 'M') echo 'selected'; ?>>Male</option>
-                <option value="F" <?php if ($urow['gender'] == 'F') echo 'selected'; ?>>Female</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Department</label>
-              <select id="edit-user-dept" name="college" style="appearance:auto" required onchange="updateEditUserYears()">
-                <option value="" disabled>Select Department</option>
-                <?php
-                $dq = mysqli_query($con, "SELECT * FROM departments ORDER BY dept_name ASC");
-                while ($dr = mysqli_fetch_array($dq)) {
-                  $sel = ($dr['dept_name'] == $urow['college']) ? 'selected' : '';
-                  echo '<option value="' . htmlspecialchars($dr['dept_name']) . '" data-years="' . htmlspecialchars($dr['year_labels']) . '" ' . $sel . '>' . htmlspecialchars($dr['dept_name']) . '</option>';
-                }
-                ?>
-              </select>
+              <label>Email (Read Only)</label>
+              <input type="email" value="<?php echo htmlspecialchars($urow['email']); ?>" disabled
+                style="opacity:0.6;cursor:not-allowed">
             </div>
             <div class="form-group">
-              <label>Year</label>
-              <select id="edit-user-year" name="year" style="appearance:auto">
-                <option value="">Select Year</option>
-              </select>
+              <label>Mobile Number</label>
+              <input name="mob" type="number" value="<?php echo $urow['mob']; ?>" required>
             </div>
-          </div>
-          <div class="form-group">
-            <label>Email (Read Only)</label>
-            <input type="email" value="<?php echo htmlspecialchars($urow['email']); ?>" disabled
-              style="opacity:0.6;cursor:not-allowed">
-          </div>
-          <div class="form-group">
-            <label>Mobile Number</label>
-            <input name="mob" type="number" value="<?php echo $urow['mob']; ?>" required>
-          </div>
-          <div class="form-group">
-            <label>New Password <span style="color:var(--text-dimmed);font-weight:400">(leave blank to keep current)</span></label>
-            <input name="new_password" type="password" placeholder="Enter new password" minlength="5">
-          </div>
-          <div style="display:flex;gap:12px;margin-top:8px">
-            <button type="submit" class="btn-submit" style="flex:1">Save Changes</button>
-            <a href="headdash.php?q=1" class="btn-action btn-danger"
-              style="display:flex;align-items:center;justify-content:center;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:600">Cancel</a>
-          </div>
-        </form>
-      </div>
-      <script>
-        (function() {
-          const currentYear = <?php echo json_encode(@$urow['year'] ?: ''); ?>;
-          function updateEditUserYears() {
-            const select = document.getElementById('edit-user-dept');
-            const opt = select.selectedOptions[0];
-            const years = opt ? opt.getAttribute('data-years') : '';
-            const yearSelect = document.getElementById('edit-user-year');
-            yearSelect.innerHTML = '<option value="">Select Year</option>';
-            if (years) {
-              years.split(',').forEach(y => {
-                const o = document.createElement('option');
-                o.value = y.trim();
-                o.textContent = y.trim();
-                if (y.trim() === currentYear) o.selected = true;
-                yearSelect.appendChild(o);
-              });
+            <div class="form-group">
+              <label>New Password <span style="color:var(--text-dimmed);font-weight:400">(leave blank to keep
+                  current)</span></label>
+              <input name="new_password" type="password" placeholder="Enter new password" minlength="5">
+            </div>
+            <div style="display:flex;gap:12px;margin-top:8px">
+              <button type="submit" class="btn-submit" style="flex:1">Save Changes</button>
+              <a href="headdash.php?q=1" class="btn-action btn-danger"
+                style="display:flex;align-items:center;justify-content:center;padding:14px 24px;border-radius:12px;text-decoration:none;font-weight:600">Cancel</a>
+            </div>
+          </form>
+        </div>
+        <script>
+          (function () {
+            const currentYear = <?php echo json_encode(@$urow['year'] ?: ''); ?>;
+            function updateEditUserYears() {
+              const select = document.getElementById('edit-user-dept');
+              const opt = select.selectedOptions[0];
+              const years = opt ? opt.getAttribute('data-years') : '';
+              const yearSelect = document.getElementById('edit-user-year');
+              yearSelect.innerHTML = '<option value="">Select Year</option>';
+              if (years) {
+                years.split(',').forEach(y => {
+                  const o = document.createElement('option');
+                  o.value = y.trim();
+                  o.textContent = y.trim();
+                  if (y.trim() === currentYear) o.selected = true;
+                  yearSelect.appendChild(o);
+                });
+              }
             }
-          }
-          window.updateEditUserYears = updateEditUserYears;
-          updateEditUserYears();
-        })();
-      </script>
-    <?php } else { ?>
-      <div class="card" style="text-align:center;padding:32px">
-        <p style="color:var(--text-dimmed)">User not found.</p>
-        <a href="headdash.php?q=1" style="color:#a885ff">Back to Users</a>
-      </div>
-    <?php } } ?>
+            window.updateEditUserYears = updateEditUserYears;
+            updateEditUserYears();
+          })();
+        </script>
+      <?php } else { ?>
+        <div class="card" style="text-align:center;padding:32px">
+          <p style="color:var(--text-dimmed)">User not found.</p>
+          <a href="headdash.php?q=1" style="color:#a885ff">Back to Users</a>
+        </div>
+      <?php }
+    } ?>
 
     <!-- SCORES -->
     <?php if (@$_GET['q'] == 2) {
@@ -1263,9 +1270,9 @@ $name = $_SESSION['name'];
           document.getElementById('match-' + id).style.display = 'none';
 
           // Show selected
-          if (type === 'mcq') {
+          if (type === 'mcq' || type === 'code') {
             document.getElementById('mcq-' + id).style.display = 'block';
-          } else if (type === 'short' || type === 'code') {
+          } else if (type === 'short') {
             document.getElementById('short-' + id).style.display = 'block';
           } else if (type === 'match') {
             document.getElementById('match-' + id).style.display = 'block';
@@ -1286,6 +1293,7 @@ $name = $_SESSION['name'];
             <tr>
               <th>#</th>
               <th>Topic</th>
+              <th>Access Code</th>
               <th>Status</th>
               <th>Questions</th>
               <th>Marks</th>
@@ -1301,7 +1309,8 @@ $name = $_SESSION['name'];
             while ($row = mysqli_fetch_array($result)) {
               $status = @$row['status'] ?: 'active';
               $status_color = ($status == 'active' ? '#2ecc71' : '#e74c3c');
-              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td><span class="badge" style="background:' . $status_color . ';color:#fff;padding:2px 6px;border-radius:4px;font-size:10px;text-transform:uppercase">' . $status . '</span></td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['time'] . ' min</td><td style="color:rgba(255,255,255,0.4)">' . $row['email'] . '</td>';
+              $code = htmlspecialchars(@$row['access_code'] ?: '—');
+              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td><code style="background:var(--bg-input);padding:3px 8px;border-radius:6px;font-size:13px;letter-spacing:1px;font-weight:600;color:var(--text-primary)">' . $code . '</code></td><td><span class="badge" style="background:' . $status_color . ';color:#fff;padding:2px 6px;border-radius:4px;font-size:10px;text-transform:uppercase">' . $status . '</span></td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['time'] . ' min</td><td style="color:rgba(255,255,255,0.4)">' . $row['email'] . '</td>';
               echo '<td>
                 <a href="headdash.php?q=manage_quiz&eid=' . $row['eid'] . '" class="btn-action btn-primary" style="margin-right:5px"><span class="material-icons" style="font-size:16px">edit</span> Manage</a>
                 <a href="update.php?q=rmquiz&eid=' . $row['eid'] . '&from=admin" class="btn-action btn-danger"><span class="material-icons" style="font-size:16px">delete</span> Remove</a>
@@ -1387,11 +1396,25 @@ $name = $_SESSION['name'];
         $target_dept = $row['target_dept'];
         $target_year = $row['target_year'];
         $status = @$row['status'];
+        $access_code = @$row['access_code'];
       }
       ?>
       <div class="page-header">
         <h1>Manage Exam: <?php echo $title; ?></h1>
         <p>Edit details, questions, and manage student attempts</p>
+      </div>
+
+      <!-- Access Code Display -->
+      <div class="card" style="display:flex;align-items:center;gap:16px;padding:20px;border-left:4px solid #7F00FF">
+        <span class="material-icons" style="font-size:28px;color:#a885ff">vpn_key</span>
+        <div>
+          <div
+            style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dimmed);margin-bottom:4px">
+            Access Code</div>
+          <div style="font-size:22px;font-weight:700;letter-spacing:3px;color:var(--text-primary);font-family:monospace">
+            <?php echo htmlspecialchars($access_code ?: '—'); ?>
+          </div>
+        </div>
       </div>
 
       <!-- Admin Controls -->

@@ -521,6 +521,7 @@ $name = $_SESSION['name'];
             <tr>
               <th>#</th>
               <th>Exam Name</th>
+              <th>Access Code</th>
               <th>Status</th>
               <th>Questions</th>
               <th>Marks</th>
@@ -537,7 +538,8 @@ $name = $_SESSION['name'];
             while ($row = mysqli_fetch_array($result)) {
               $status = @$row['status'] ?: 'active';
               $status_color = ($status == 'active' ? '#2ecc71' : '#e74c3c');
-              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td><span class="badge" style="background:' . $status_color . ';color:#fff;padding:2px 6px;border-radius:4px;font-size:10px;text-transform:uppercase">' . $status . '</span></td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['sahi'] . '</td><td>' . $row['wrong'] . '</td><td>' . $row['time'] . ' min</td>
+              $code = htmlspecialchars(@$row['access_code'] ?: '—');
+              echo '<tr><td>' . $c++ . '</td><td>' . $row['title'] . '</td><td><code style="background:var(--bg-input);padding:3px 8px;border-radius:6px;font-size:13px;letter-spacing:1px;font-weight:600;color:var(--text-primary)">' . $code . '</code></td><td><span class="badge" style="background:' . $status_color . ';color:#fff;padding:2px 6px;border-radius:4px;font-size:10px;text-transform:uppercase">' . $status . '</span></td><td>' . $row['total'] . '</td><td>' . ($row['sahi'] * $row['total']) . '</td><td>' . $row['sahi'] . '</td><td>' . $row['wrong'] . '</td><td>' . $row['time'] . ' min</td>
               <td><a href="dash.php?q=manage_quiz&eid=' . $row['eid'] . '" class="btn-action btn-primary" style="margin-right:5px"><span class="material-icons" style="font-size:16px">edit</span> Manage</a></td></tr>';
             }
             ?>
@@ -791,18 +793,15 @@ $name = $_SESSION['name'];
           document.getElementById('match-' + id).style.display = 'none';
 
           // Show selected
-          if (type === 'mcq') {
+          if (type === 'mcq' || type === 'code') {
             document.getElementById('mcq-' + id).style.display = 'block';
-          } else if (type === 'short' || type === 'code') {
-            document.getElementById('short-' + id).style.display = 'block'; // 'short' covers both text/code inputs for answer
+          } else if (type === 'short') {
+            document.getElementById('short-' + id).style.display = 'block';
           } else if (type === 'match') {
             document.getElementById('match-' + id).style.display = 'block';
           }
         }
       </script>
-      <button type="submit" class="btn-submit">Save All Questions</button>
-      </form>
-      </div>
     <?php } ?>
 
     <!-- REMOVE EXAM -->
@@ -851,11 +850,24 @@ $name = $_SESSION['name'];
         $intro = $row['intro'];
         $target_dept = $row['target_dept'];
         $target_year = $row['target_year'];
+        $access_code = @$row['access_code'];
       }
       ?>
       <div class="page-header">
         <h1>Manage Exam: <?php echo $title; ?></h1>
         <p>Edit details and questions</p>
+      </div>
+
+      <!-- Access Code Display -->
+      <div class="card" style="display:flex;align-items:center;gap:16px;padding:20px;border-left:4px solid var(--accent)">
+        <span class="material-icons" style="font-size:28px;color:var(--accent)">vpn_key</span>
+        <div>
+          <div
+            style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dimmed);margin-bottom:4px">
+            Access Code</div>
+          <div style="font-size:22px;font-weight:700;letter-spacing:3px;color:var(--text-primary);font-family:monospace">
+            <?php echo htmlspecialchars($access_code ?: '—'); ?></div>
+        </div>
       </div>
 
       <!-- Exam Details Form -->
