@@ -1,5 +1,5 @@
 <?php
-include_once 'dbConnection.php';
+include_once 'config/dbConnection.php';
 session_start();
 if (!(isset($_SESSION['email'])) || !(isset($_SESSION['key']))) {
   header("location:admin_login.php?w=Session expired. Please login again.");
@@ -496,7 +496,7 @@ $name = $_SESSION['name'];
 
   <nav class="sidebar">
     <div class="sidebar-brand">
-      <img src="ecusta_logo.png" alt="Logo">
+      <img src="assets/img/ecusta_logo.png" alt="Logo">
       <span>ECUSTA</span>
       <span class="admin-badge">Admin</span>
     </div>
@@ -1056,7 +1056,7 @@ $name = $_SESSION['name'];
         <p>Register a new teacher account</p>
       </div>
       <div class="card" style="max-width:500px">
-        <form action="signadmin.php?q=headdash.php?q=4" method="POST">
+        <form action="includes/signadmin.php?q=headdash.php?q=4" method="POST">
           <div class="form-group">
             <label>Teacher Email</label>
             <input name="email" type="email" placeholder="teacher@ecusta.edu.et" required>

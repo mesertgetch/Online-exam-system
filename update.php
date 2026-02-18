@@ -1,8 +1,7 @@
 <?php
-include_once 'dbConnection.php';
+include_once 'config/dbConnection.php';
 ob_start();
 session_start();
-file_put_contents("/opt/lampp/htdocs/Online-exam-system/debug_log.txt", "Update.php called. Q: " . @$_GET['q'] . " Key: " . @$_SESSION['key'] . " POST_EID: " . @$_POST['eid'] . " GET_EID: " . @$_GET['eid'] . "\n", FILE_APPEND);
 $email = $_SESSION['email'];
 //delete feedback
 if (isset($_SESSION['key'])) {

@@ -367,7 +367,7 @@
     <div class="container">
         <!-- Logo -->
         <div class="logo-section">
-            <img src="ecusta_logo.png" alt="ECUSTA Logo">
+            <img src="assets/img/ecusta_logo.png" alt="ECUSTA Logo">
             <h1>ECUSTA</h1>
             <div class="badge">Admin &amp; Teacher Portal</div>
         </div>
@@ -385,7 +385,7 @@
                     <span class="material-icons">shield</span>
                     <span>System Administrator Access</span>
                 </div>
-                <form method="post" action="head.php?q=admin_login.php">
+                <form method="post" action="includes/head.php?q=admin_login.php">
                     <div class="form-group">
                         <label for="admin-email">Admin Email</label>
                         <input id="admin-email" name="uname" type="text" placeholder="admin@ecusta.edu.et"
@@ -406,7 +406,7 @@
                     <span class="material-icons">school</span>
                     <span>Teacher / Instructor Access</span>
                 </div>
-                <form method="post" action="admin.php?q=admin_login.php">
+                <form method="post" action="includes/admin.php?q=admin_login.php">
                     <div class="form-group">
                         <label for="teacher-email">Teacher Email</label>
                         <input id="teacher-email" name="uname" type="text" placeholder="teacher@ecusta.edu.et"

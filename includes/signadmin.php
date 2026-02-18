@@ -1,7 +1,6 @@
-
 <?php
-include_once 'dbConnection.php';
-$ref=@$_GET['q'];
+include_once __DIR__ . '/../config/dbConnection.php';
+$ref = @$_GET['q'];
 //$name = $_POST['name'];
 //$name= ucwords(strtolower($name));
 //$gender = $_POST['gender'];
@@ -11,7 +10,7 @@ $password = $_POST['password'];
 
 
 
-$q=mysqli_query($con,"INSERT INTO admin VALUES  ('$email' , '$password' , 'admin')");
+$q = mysqli_query($con, "INSERT INTO admin VALUES  ('$email' , '$password' , 'admin')");
 
 
 header("location:$ref?q=Succesfully registered");

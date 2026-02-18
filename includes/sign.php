@@ -1,5 +1,5 @@
 <?php
-include_once 'dbConnection.php';
+include_once __DIR__ . '/../config/dbConnection.php';
 ob_start();
 $name = $_POST['name'];
 $name = ucwords(strtolower($name));

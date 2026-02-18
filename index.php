@@ -388,7 +388,7 @@
   <div class="container">
     <!-- Logo -->
     <div class="logo-section">
-      <img src="ecusta_logo.png" alt="ECUSTA Logo">
+      <img src="assets/img/ecusta_logo.png" alt="ECUSTA Logo">
       <h1>ECUSTA</h1>
       <p>Online Examination System</p>
     </div>
@@ -403,7 +403,7 @@
 
       <!-- Sign In Form -->
       <div id="signin" class="tab-content active">
-        <form action="login.php?q=index.php" method="POST">
+        <form action="includes/login.php?q=index.php" method="POST">
           <div class="form-group">
             <label for="login-email">Email Address</label>
             <input id="login-email" name="email" type="email" placeholder="you@example.com" required>
@@ -418,7 +418,7 @@
 
       <!-- Sign Up Form -->
       <div id="signup" class="tab-content">
-        <form name="form" action="sign.php?q=account.php" method="POST" onsubmit="return validateSignUp()">
+        <form name="form" action="includes/sign.php?q=account.php" method="POST" onsubmit="return validateSignUp()">
           <div class="form-row">
             <div class="form-group">
               <label for="reg-name">Full Name</label>

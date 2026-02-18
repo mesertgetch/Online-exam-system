@@ -1,5 +1,5 @@
 <?php
-include_once 'dbConnection.php';
+include_once 'config/dbConnection.php';
 session_start();
 if (!(isset($_SESSION['email'])) || !(isset($_SESSION['key']))) {
   header("location:admin_login.php?w=Session expired. Please login again.");
@@ -461,7 +461,7 @@ $name = $_SESSION['name'];
 
   <nav class="sidebar">
     <div class="sidebar-brand">
-      <img src="ecusta_logo.png" alt="Logo">
+      <img src="assets/img/ecusta_logo.png" alt="Logo">
       <span>ECUSTA</span>
     </div>
     <div class="sidebar-nav">
@@ -866,7 +866,8 @@ $name = $_SESSION['name'];
             style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text-dimmed);margin-bottom:4px">
             Access Code</div>
           <div style="font-size:22px;font-weight:700;letter-spacing:3px;color:var(--text-primary);font-family:monospace">
-            <?php echo htmlspecialchars($access_code ?: '—'); ?></div>
+            <?php echo htmlspecialchars($access_code ?: '—'); ?>
+          </div>
         </div>
       </div>
 

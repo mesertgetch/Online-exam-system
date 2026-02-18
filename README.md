@@ -52,10 +52,10 @@ A modern, web-based online examination platform built with PHP and MySQL. Design
 2. **Create the database:**
    - Open [phpMyAdmin](http://localhost/phpmyadmin)
    - Create a new database named **`project1`**
-   - Import the file `project1.sql` from the project root
+   - Import the file `database/project1.sql`
 
 3. **Configure the database connection** (if needed):
-   - Edit `dbConnection.php` with your credentials
+   - Edit `config/dbConnection.php` with your credentials
    - Defaults: host=`localhost`, user=`root`, password=`""`, database=`project1`
 
 4. **Open in your browser:**
@@ -82,25 +82,38 @@ A modern, web-based online examination platform built with PHP and MySQL. Design
 
 ```
 Online-exam-system/
-├── index.php            # Student sign-in / sign-up portal
-├── admin_login.php      # Admin & Teacher login portal
-├── account.php          # Student dashboard
-├── dash.php             # Teacher dashboard
-├── headdash.php         # Admin dashboard
-├── login.php            # Student login handler
-├── sign.php             # Student registration handler
-├── admin.php            # Teacher login handler
-├── head.php             # Admin login handler
-├── signadmin.php        # Teacher registration handler
-├── update.php           # Backend operations (quiz, user, admin CRUD)
-├── logout.php           # Session destroyer
-├── dbConnection.php     # Database connection config
-├── project1.sql         # Database schema & seed data
-├── ecusta_logo.png      # University logo
+├── index.php              # Student sign-in / sign-up portal
+├── admin_login.php        # Admin & Teacher login portal
+├── account.php            # Student dashboard
+├── dash.php               # Teacher dashboard
+├── headdash.php           # Admin dashboard
+├── update.php             # Backend operations (quiz, user, admin CRUD)
+├── logout.php             # Session destroyer
+├── assets/
+│   └── img/
+│       └── ecusta_logo.png  # University logo
+├── config/
+│   └── dbConnection.php   # Database connection config
 ├── css/
-│   └── main.css         # Global stylesheet
-└── js/
-    └── main.js          # Client-side scripts
+│   └── theme.css          # Global stylesheet & theme variables
+├── js/
+│   └── theme.js           # Theme toggle & shared UI scripts
+├── fonts/
+│   ├── gothic.ttf         # Gothic font
+│   └── typo.ttf           # Typo font
+├── includes/
+│   ├── login.php          # Student login handler
+│   ├── sign.php           # Student registration handler
+│   ├── head.php           # Admin login handler
+│   ├── admin.php          # Teacher login handler
+│   ├── signadmin.php      # Teacher registration handler
+│   └── feed.php           # Feedback submission handler
+└── database/
+    ├── project1.sql       # Database schema & seed data
+    ├── patch_schema.php   # Schema patch v1
+    ├── patch_schema_v2.php
+    ├── patch_schema_v3.php
+    └── patch_schema_v4.php
 ```
 
 ---

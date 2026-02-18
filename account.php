@@ -1,5 +1,5 @@
 <?php
-include_once 'dbConnection.php';
+include_once 'config/dbConnection.php';
 session_start();
 if (!(isset($_SESSION['email']))) {
   header("location:index.php");
@@ -476,7 +476,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
   <!-- Sidebar -->
   <nav class="sidebar">
     <div class="sidebar-brand">
-      <img src="ecusta_logo.png" alt="Logo">
+      <img src="assets/img/ecusta_logo.png" alt="Logo">
       <span>ECUSTA</span>
     </div>
     <div class="sidebar-nav">
@@ -1638,7 +1638,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
             .replace(/>/g, '&gt;');
-          
+
           // Apply syntax highlighting with spans
           // Comments (// and /* */)
           escaped = escaped.replace(/(\/\/.*$)/gm, '<span class="syn-comment">$1</span>');
@@ -1647,14 +1647,14 @@ while ($row_u = mysqli_fetch_array($q_user)) {
           escaped = escaped.replace(/("(?:[^"\\]|\\.)*")/g, '<span class="syn-string">$1</span>');
           escaped = escaped.replace(/('(?:[^'\\]|\\.)*')/g, '<span class="syn-string">$1</span>');
           // Keywords (Java, Python, C, C++)
-          const keywords = ['abstract','assert','boolean','break','byte','case','catch','char','class','const','continue','def','default','do','double','elif','else','enum','extends','final','finally','float','for','from','goto','if','implements','import','in','instanceof','int','interface','is','lambda','long','native','new','not','or','and','package','pass','private','print','protected','public','raise','return','short','static','strictfp','super','switch','synchronized','this','throw','throws','transient','try','void','volatile','while','with','yield','String','System','Math','null','true','false','True','False','None','self','def','class','elif','except','exec','lambda','range','len','input','output','cout','cin','endl','printf','scanf','include','define','using','namespace','std','main','println'];
+          const keywords = ['abstract', 'assert', 'boolean', 'break', 'byte', 'case', 'catch', 'char', 'class', 'const', 'continue', 'def', 'default', 'do', 'double', 'elif', 'else', 'enum', 'extends', 'final', 'finally', 'float', 'for', 'from', 'goto', 'if', 'implements', 'import', 'in', 'instanceof', 'int', 'interface', 'is', 'lambda', 'long', 'native', 'new', 'not', 'or', 'and', 'package', 'pass', 'private', 'print', 'protected', 'public', 'raise', 'return', 'short', 'static', 'strictfp', 'super', 'switch', 'synchronized', 'this', 'throw', 'throws', 'transient', 'try', 'void', 'volatile', 'while', 'with', 'yield', 'String', 'System', 'Math', 'null', 'true', 'false', 'True', 'False', 'None', 'self', 'def', 'class', 'elif', 'except', 'exec', 'lambda', 'range', 'len', 'input', 'output', 'cout', 'cin', 'endl', 'printf', 'scanf', 'include', 'define', 'using', 'namespace', 'std', 'main', 'println'];
           const keywordRegex = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'g');
           escaped = escaped.replace(keywordRegex, (match) => {
             // Don't highlight inside already-highlighted spans
             return '<span class="syn-keyword">' + match + '</span>';
           });
           // Types
-          const types = ['int','float','double','char','boolean','byte','short','long','void','String','Integer','Boolean','Double','Float','List','Map','Set','Array','Object'];
+          const types = ['int', 'float', 'double', 'char', 'boolean', 'byte', 'short', 'long', 'void', 'String', 'Integer', 'Boolean', 'Double', 'Float', 'List', 'Map', 'Set', 'Array', 'Object'];
           const typeRegex = new RegExp('(?<![\\w])(' + types.join('|') + ')(?![\\w])', 'g');
           // Numbers
           escaped = escaped.replace(/\b(\d+\.?\d*)\b/g, '<span class="syn-number">$1</span>');
@@ -1667,20 +1667,20 @@ while ($row_u = mysqli_fetch_array($q_user)) {
         // Format question text - detect code blocks and apply highlighting
         function formatQuestionText(text, isCodeType) {
           if (!text) return '';
-          
+
           // If text contains <pre> or ``` markers, parse them
-          let formatted = text;
-          
-          // Handle ``` code blocks (markdown style)
+        let formatted = text;
+
+        // Handle ``` code blocks (markdown style)
           formatted = formatted.replace(/```(\w*)\n?([\s\S]*?)```/g, (match, lang, code) => {
             return '<pre><code>' + highlightSyntax(code.trim()) + '</code></pre>';
           });
-          
+
           // Handle <pre> tags already in text
           formatted = formatted.replace(/<pre>([\s\S]*?)<\/pre>/g, (match, code) => {
             return '<pre><code>' + highlightSyntax(code.trim()) + '</code></pre>';
           });
-          
+
           // For code-type questions: if no code block was detected, check for multi-line 
           // content that looks like code (contains brackets, semicolons, indentation)
           if (isCodeType && !formatted.includes('<pre>')) {
@@ -1688,7 +1688,7 @@ while ($row_u = mysqli_fetch_array($q_user)) {
             let textPart = [];
             let codePart = [];
             let inCode = false;
-            
+
             for (let line of lines) {
               const looksLikeCode = /[{}();=<>]/.test(line) || /^\s{2,}/.test(line) || /^(int|for|if|while|def|class|public|private|void|return|import|from|print|System)/.test(line.trim());
               if (looksLikeCode && !inCode) {
@@ -1700,17 +1700,17 @@ while ($row_u = mysqli_fetch_array($q_user)) {
                 textPart.push(line);
               }
             }
-            
+
             if (codePart.length > 0) {
               formatted = textPart.join('\n');
               if (formatted.trim()) formatted += '\n';
               formatted += '<pre><code>' + highlightSyntax(codePart.join('\n')) + '</code></pre>';
             }
           }
-          
+
           // Convert remaining newlines to <br> outside of <pre> blocks
           formatted = formatted.replace(/([^>])\n/g, '$1<br>');
-          
+
           return formatted;
         }
 
