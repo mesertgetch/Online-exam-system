@@ -69,7 +69,7 @@ A modern, web-based online examination platform built with PHP and MySQL. Design
 
 | Role     | Email               | Password   | Dashboard        |
 |----------|---------------------|------------|------------------|
-| Admin    | `head@gmail.com`    | `head`     | `headdash.php`   |
+| Admin    | `admin@gmail.com`    | `admin123`     | `headdash.php`   |
 | Teacher  | `teacher1@gmail.com`| `teacher1` | `dash.php`       |
 | Student  | *(sign up to create)* | —        | `account.php`    |
 
